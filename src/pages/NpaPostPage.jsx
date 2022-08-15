@@ -38,8 +38,8 @@ const NpaPostPage = () => {
                 </div>
 
                 <MTable 
-                headers={headers} 
-                bodies={bodies}
+                    headers={headers} 
+                    bodies={bodies}
                 />
             </>
             : 

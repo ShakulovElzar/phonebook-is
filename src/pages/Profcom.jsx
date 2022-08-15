@@ -53,9 +53,9 @@ const Profcom = () => {
         >
 
             {
-                NOPArr.map((item, index) => <div className='carousel__wrapper'>
+                NOPArr.map((item, index) => <div className='carousel__wrapper' key={index}>
                     {
-                        items.slice((index * 6), (index * 6 + 6)).map((item, index) => <CarouselItem text={item.text} imgURL={item.imgURL}/>)
+                        items.slice((index * 6), (index * 6 + 6)).map((item, index) => <CarouselItem text={item.text} key={index} imgURL={item.imgURL}/>)
                     }
                     </div>
                 )

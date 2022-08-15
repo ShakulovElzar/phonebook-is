@@ -16,7 +16,7 @@ import { useContext } from 'react';
 import MyLoader from "./UI/MyLoader/MyLoader";
 import { AuthContext } from '../context';
 
-const AppRouter = () => {
+const AppRouter = (props) => {
     let {isAuth, isLoading} = useContext(AuthContext)
     
     if(isLoading){
@@ -29,7 +29,7 @@ const AppRouter = () => {
                     ?
                     <Routes>
                         <Route exact path="/departments" element={<Home/>} key="1"/>
-                        <Route exact path="/departments/:id" element={<DepartmentPostPage />}  key="8" />
+                        <Route exact path="/department/:id" element={<DepartmentPostPage />}  key="8" />
                         <Route exact path="/npa" element={<Npa />} key="3"/>
                         <Route exact path="/npa/:id" element={<NpaPostPage />} key="9"/>
                         <Route exact path="/profcom" element={<Profcom/>} key="2"/>
@@ -40,7 +40,7 @@ const AppRouter = () => {
                     </Routes>
                     :
                     <Routes>    
-                        <Route exact path="/login" element={<Login />} key="7" />
+                        <Route exact path="/login" element={<Login setPage={props.setPage}/>} key="7" />
                         <Route exact path='/login/update-password' element={<ChangePassword />} key="71"/>
                         <Route exact path='/login/update-email' element={<ChangeEmail />} key="72"/>
                         <Route exact path='/login/register' element={<Register />} key="73"/>

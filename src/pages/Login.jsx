@@ -7,7 +7,7 @@ import {AuthContext} from '../context';
 import {useContext} from 'react';
 
 
-const Login = () => {
+const Login = (props) => {
     let {setIsAuth} = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -32,6 +32,7 @@ const Login = () => {
 			}
 		})
         if (response === undefined) return;
+        props.setPage(1)
         sessionStorage.setItem("atoken", response.data.access)
         sessionStorage.setItem("rtoken", response.data.refresh)
         sessionStorage.setItem("user", response.data.email)
@@ -50,8 +51,8 @@ const Login = () => {
 
     const passwordHandler = (e) => {
         setPassword(e.target.value);
-        if (e.target.value.length < 3 || e.target.value.length > 312312) {
-            setPasswordError('Пароль не должен быть длиннее 8 и меньше 3 символов');
+        if (e.target.value.length < 4 || e.target.value.length > 20) {
+            setPasswordError('Пароль не должен быть менее 4 символов');
             if (!e.target.value) {
                 setPasswordError('Поле пароля не может быть пустым')
             }

@@ -12,16 +12,14 @@ import { AuthContext } from './context/';
 function App() {
   const [isAuth, setIsAuth] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-
   const [page, setPage] = useState(1)
 
-  useEffect(() => {
-    localStorage.setItem("page", page)
-  }, [page])
+
 
   useEffect(() => {
     let localPage = localStorage.getItem("page")
-    setPage(localPage)
+    setPage(parseInt(localPage))
+
     
 
     if(localStorage.getItem('auth')){

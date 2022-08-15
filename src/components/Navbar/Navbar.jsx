@@ -16,14 +16,15 @@ const Navbar = ({page, setPage}) => {
         {id: 7, to: '/login', name: logName}
         
     ]
-    
+
     useEffect(() => {
         if(isAuth){
             setLogName("Выйти")
-        } else{
+        } else {
             setLogName("Войти")
         }
     }, [isAuth])
+
     
     return (
         <div className="navbar">
@@ -33,12 +34,14 @@ const Navbar = ({page, setPage}) => {
                         to={item.to} 
                         key={item.id} 
                         onClick={() => {
+                            if(!isAuth) return
                             if(item.id === 7){
                                 setIsAuth(false)
                             }
                             setPage(item.id)
+                            localStorage.setItem('page', JSON.stringify(item.id))
                         }}
-                        className="navbar__link"
+                        className={page == item.id ? "navbar__link active" : "navbar__link"}
                     >
                         {item.name}
                     </Link>

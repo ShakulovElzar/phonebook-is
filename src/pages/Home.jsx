@@ -28,7 +28,7 @@ const Home = () => {
         <div className="home-body">
             <p className={c.homeText}>Структура</p>
 
-            <MyTable page="departments" tableData={tableData}/>
+            <MyTable page="department" tableData={tableData}/>
         </div>
     );
 };

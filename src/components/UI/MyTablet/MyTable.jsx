@@ -8,7 +8,7 @@ const MyTable = ({tableData, page}) => {
 
     const uptadeViews = (pageIndex, views) => {
         axios.patch(
-            `http://10.200.24.103:8089/department/update/${pageIndex}/`,
+            `http://10.200.24.103:8089/${page}/update/${pageIndex}/`,
             { 
                 headers: {
                     'Authorization' : `Bearer ${localStorage.getItem("atoken")}`
@@ -18,9 +18,9 @@ const MyTable = ({tableData, page}) => {
                 }
             }
         ).then(function(response) {
-            alert('Authenticated');
+            console.log('Authenticated: ' + response);
         }).catch(function(error) {
-            alert('Error on Authentication');
+            console.log('Error on Authentication: ' + error);
         });
     }
 
