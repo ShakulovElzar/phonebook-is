@@ -1,0 +1,44 @@
+.table{
+    border-collapse: collapse;
+    font-size: 14px;
+    width: 100%;
+}
+
+.tr, td {
+    border: 1px solid #e5e5e5;
+}
+
+.table thead tr {
+    background-color: rgb(172, 172, 172);
+    color: #199e81;
+}
+
+.headBox{
+    background-color: #e5e5e5;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.bodyRow{
+    background-color: #fff;
+}
+
+.bodyRowTitle, .bodyRowViews{
+    padding: 10px 15px;
+}
+
+.bodyRowTitle{
+    color: #199e81;
+}
+.bodyRowTitle:hover{
+    color: #000000;
+}
+
+
+.bodyRowViews{
+    color: #777777;
+}
+
+.tableLink{
+    width: 1000px;
+}

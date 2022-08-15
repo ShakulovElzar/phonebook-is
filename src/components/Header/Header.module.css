@@ -1,0 +1,17 @@
+.link{
+    text-align: center;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    padding: 25px 0;
+}
+
+.phonebook{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.phonebook__reporter{
+    font-size: 11px;
+    color: gray;
+}

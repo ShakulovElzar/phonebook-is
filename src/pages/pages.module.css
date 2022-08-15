@@ -1,0 +1,11 @@
+.homeText{
+    font-size: 28px;
+    margin-bottom: 50px;
+}
+
+.loginBody{
+    background-color: #fff;
+    padding: 50px;
+    width: 400px;
+    margin: 0 auto;
+}
