@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+
 
 const ChangeEmail = () => {
+	const [cet, setCet] = useState("")
+
+	const submitEmail = (event) => {
+		event.preventDefault()
+		console.log("heyhey");
+	}
+
     return (
         <div className='page-body'>
             <div className="reset">
-	            <form id="user-registration" method="post" class="form-validate">
+	            <form id="user-registration" method="post" class="form-validate" onSubmit={submitEmail}>
 					<p>Введите, пожалуйста, адрес электронной почты, указанный в параметрах вашей учётной записи. На этот адрес будет отправлено письмо, содержащее ваш Логин.</p>
 					<div class="control-group">
 					    <div class="control-label">
@@ -12,7 +21,7 @@ const ChangeEmail = () => {
 	                            Адрес электронной почты<span class="star">&nbsp;*</span></label>					
                         </div>
 					    <div class="controls">
-						    <input type="text" id="jform_email" value="" className="validate-username" size="30" required="required" aria-required="true" />						
+						    <input type="text" onClick={(value) => setCet(value.target.value)} value={cet} className="validate-username" size="30" required="required" aria-required="true" />						
                             <button type="submit" className="validate-button">Отправить</button>
 					    </div>
 				    </div>

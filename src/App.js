@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter} from 'react-router-dom';
 import './styles/App.css';
 import './styles/normalize.css';
 import Header from './components/Header/Header';
@@ -17,12 +17,10 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("page", page)
-    console.log("LocalPage: " + localStorage.getItem("page") + " Page: " + page)
   }, [page])
 
   useEffect(() => {
     let localPage = localStorage.getItem("page")
-    console.log(localStorage.getItem("page"), localPage);
     setPage(localPage)
     
 
@@ -38,7 +36,7 @@ function App() {
       setIsAuth, 
       isLoading
     }}>
-      <Router>
+      <BrowserRouter>
         <Header />
         <div className="App">
 
@@ -46,7 +44,7 @@ function App() {
           <AppRouter setPage={setPage}/>
         
         </div>
-      </Router>
+      </BrowserRouter>
     </AuthContext.Provider>
   );
 }

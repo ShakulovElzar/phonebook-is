@@ -6,8 +6,8 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
-  width: 1280,
-  height: 720,
+  width: 515,
+  height: 320,
 }));
 
 const darkTheme = createTheme({ palette: { mode: 'dark' } });
@@ -34,7 +34,14 @@ const Profcom = () => {
         {"videoURL": "", "text": "16"},
         {"videoURL": "", "text": "17"},
         {"videoURL": "", "text": "18"},
+        {"videoURL": "", "text": "19"},
     ]
+
+    let numberOfPages = Math.ceil(items.length / 6)
+    let NOPArr = []
+    for(let i = 1; i <= numberOfPages; i++) {
+        NOPArr.push(i)
+    }
 
 
     return (
@@ -42,9 +49,16 @@ const Profcom = () => {
             swipe={true}
             autoPlay={false}
             navButtonsAlwaysVisible={true}
+            className="page-body"
         >
+
             {
-                items.map(item =>   <CarouselItem text={item.text} imgURL={item.imgURL}/>)
+                NOPArr.map((item, index) => <div className='carousel__wrapper'>
+                    {
+                        items.slice((index * 6), (index * 6 + 6)).map((item, index) => <CarouselItem text={item.text} imgURL={item.imgURL}/>)
+                    }
+                    </div>
+                )
             }
         </Carousel>
     );

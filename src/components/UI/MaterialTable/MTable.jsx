@@ -43,7 +43,7 @@ const MTable = (props) => {
                         <TableRow key={index}>
                             {el.map((data, index) => <TableCell key={index}>
                                 {
-                                    index == 0 
+                                    index === 0 
                                     ? 
                                     <img src={data} alt="" />
                                     : 

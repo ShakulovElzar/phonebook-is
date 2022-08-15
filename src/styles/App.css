@@ -195,9 +195,8 @@ fieldset{
 
 
 .carousel__text{
-  position: absolute;
-  left: 48%;
-  top: 45%;
+  text-align: center;
+  margin-top: 150px;
 }
 
 .search__ordering__label{
@@ -256,4 +255,12 @@ fieldset{
     color: #199e81;
     background: white;
     cursor: pointer;
+}
+
+.carousel__wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr; 
+  grid-gap: 20px;
+  min-height: 1000px;
 }

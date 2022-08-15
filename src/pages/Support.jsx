@@ -2,20 +2,26 @@ import axios from 'axios';
 import React, { useState } from 'react';
 
 const Support = () => {
-    const [reportIssue, setReportIssue] = useState("")
+    const [reportIssue, setReportIssue] = useState("Замена картриджа")
     const [reportText, setReportText] = useState("")
 
     const sendReport = event => {
         event.preventDefault()
         const user = sessionStorage.getItem("user")
-        const response = axios.post('http://10.200.24.103:8089/help/create/',{Headers: {
-            "Authorization": sessionStorage.getItem("atoken")
-        }}, {
-            "choise": reportIssue,
-            "description": reportText,
-            "for_whom": user,
-            "author": 1
-        })
+        const atoken = localStorage.getItem("atoken")
+        const rtoken = localStorage.getItem("rtoken")
+
+        const response = axios.post('http://10.200.24.103:8089/help/create/',{
+            headers: {
+                Authorization: `Bearer ${atoken}`
+            }, 
+            body: {
+                "choise": reportIssue,
+                "description": reportText,
+                "for_whom": user,
+                "author": 1
+            }
+        }).then((t) => console.log(t))
     }
 
     const changeReportIssue = (value) => {

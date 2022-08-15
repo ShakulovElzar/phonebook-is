@@ -7,16 +7,21 @@ const MyTable = ({tableData, page}) => {
     const navigate = useNavigate()
 
     const uptadeViews = (pageIndex, views) => {
-        let token = sessionStorage.getItem("token")
-        axios.put(
+        axios.patch(
             `http://10.200.24.103:8089/department/update/${pageIndex}/`,
-            { headers: {
-                'X-CSRFToken' : token
-            } }, 
-            {
-            "views": views + 1
+            { 
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("atoken")}`
+                }, 
+                body: {
+                    "views": views + 1
+                }
             }
-        )
+        ).then(function(response) {
+            alert('Authenticated');
+        }).catch(function(error) {
+            alert('Error on Authentication');
+        });
     }
 
     return (
