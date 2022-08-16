@@ -11,7 +11,7 @@ const Login = (props) => {
     let {setIsAuth} = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-	const [rememberMe, setRememberMe] = useState(false)
+	const [rememberMe, setRememberMe] = useState(false);
 
     const [emailDirty, setEmailDirty] = useState(false);
     const [passwordDirty, setPasswordDirty] = useState(false);
@@ -19,35 +19,41 @@ const Login = (props) => {
     const [passwordError, setPasswordError] = useState('Поле пароля не может быть пустым');
 
     const login = async (event) => {
-        event.preventDefault()
+        event.preventDefault();
+        let localPassword = password;
+        if(password === ""){
+            localPassword = "12345"
+        }
         const response = await axios.post('http://10.200.24.103:8089/account/login/', {
             email,
-            password
+            password: localPassword
         }).catch(error => {
-			let message = error.response.data
+			let message = error.response.data;
 			if(message.hasOwnProperty("non_field_errors")){
 				setPasswordError("Неправильный пароль")
 			} else if(message.hasOwnProperty("email")){
 				setEmailError("Неправильный логин")
 			}
-		})
+		});
+
         if (response === undefined) return;
-        props.setPage(1)
-        sessionStorage.setItem("atoken", response.data.access)
-        sessionStorage.setItem("rtoken", response.data.refresh)
-        sessionStorage.setItem("user", response.data.email)
-        setIsAuth(true)
-    }
+        sessionStorage.setItem("atoken", response.data.access);
+        sessionStorage.setItem("rtoken", response.data.refresh);
+        sessionStorage.setItem("user", response.data.email);
+        setIsAuth(true);
+        props.setPage(1);
+        localStorage.setItem("page", JSON.stringify(1));
+    };
 
     const emailHandler = (e) => {
-        setEmail(e.target.value)
-        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        setEmail(e.target.value);
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!re.test(String(e.target.value).toLowerCase())) {
             setEmailError('Некорректная эл.почта')
         } else {
             setEmailError('')
         }
-    }
+    };
 
     const passwordHandler = (e) => {
         setPassword(e.target.value);
@@ -65,13 +71,13 @@ const Login = (props) => {
     const blurHandler = (e) => {
         switch (e.target.name) {
             case 'email':
-                setEmailDirty(true)
-                break
+                setEmailDirty(true);
+                break;
             case 'password':
-                setPasswordDirty(true)
-                break
+                setPasswordDirty(true);
+                break;
         }
-    }
+    };
 
     return (
         <div className={c.loginBody}>
@@ -109,7 +115,7 @@ const Login = (props) => {
 
 <div className="login__rememberme">
                         <label>Запомнить меня</label>
-                        <input type="checkbox" value={rememberMe} onClick={(t) => {
+                        <input type="checkbox" value={rememberMe} onClick={() => {
 							if(rememberMe === false) {
 								setRememberMe(true)
 							}

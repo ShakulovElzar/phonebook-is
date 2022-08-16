@@ -15,12 +15,13 @@ import NpaPostPage from '../pages/NpaPostPage';
 import { useContext } from 'react';
 import MyLoader from "./UI/MyLoader/MyLoader";
 import { AuthContext } from '../context';
+import ProfcomPostPage from "../pages/ProfcomPostPage";
 
 const AppRouter = (props) => {
-    let {isAuth, isLoading} = useContext(AuthContext)
+    let {isAuth, isLoading} = useContext(AuthContext);
     
     if(isLoading){
-        return <MyLoader />
+        return <MyLoader />;
     }
     return (
         <>
@@ -33,6 +34,7 @@ const AppRouter = (props) => {
                         <Route exact path="/npa" element={<Npa />} key="3"/>
                         <Route exact path="/npa/:id" element={<NpaPostPage />} key="9"/>
                         <Route exact path="/profcom" element={<Profcom/>} key="2"/>
+                        <Route exact path="/profcom/:id" element={<ProfcomPostPage />} key="9"/>
                         <Route exact path="/search" element={<Search />} key="4"/>
                         <Route exact path="/journal" element={<Journal />} key="5"/>
                         <Route exact path="/support" element={<Support />} key="6"/>

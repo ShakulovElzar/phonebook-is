@@ -31,28 +31,32 @@ const MTable = (props) => {
 
     return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650}} aria-label="simple table">
+            <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
                 <TableHead>
                     <TableRow>
                         {props.headers.map((el, index) => <StyledTableCell key={index} align="center"><strong>{el}</strong></StyledTableCell>)}
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                
-                    {props.bodies.map((el, index) => 
-                        <TableRow key={index}>
-                            {el.map((data, index) => <TableCell key={index}>
-                                {
-                                    index === 0 
-                                    ? 
-                                    <img src={data} alt="" />
-                                    : 
-                                    data
-                                }
-                            </TableCell>
-                            )}
-                        </TableRow>    
-                    )}
+
+                    {
+                        props.bodies.map((el, index) =>
+                                <TableRow key={index}>
+                                    {el.map((data, index) => <TableCell key={index}>
+                                            {
+                                                index === 0
+                                                    ?
+                                                    <img src={data} alt="" />
+                                                    :
+                                                    data
+                                            }
+                                        </TableCell>
+                                    )}
+                                </TableRow>
+                        )
+                    }
+
+                    {}
                    
                 </TableBody>
             </Table>
