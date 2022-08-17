@@ -37,6 +37,7 @@ const Navbar = ({page, setPage}) => {
                             if(!isAuth) return
                             if(item.id === 7){
                                 setIsAuth(false)
+                                localStorage.removeItem("IP")
                             }
                             setPage(item.id)
                             localStorage.setItem('page', JSON.stringify(item.id))

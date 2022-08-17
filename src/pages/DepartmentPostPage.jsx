@@ -96,7 +96,7 @@ const DepartmentPostPage = () => {
             {
                 postData.innerDepartments.map((dep, index) => <div key={index} className='deparment__block'>
                     <h2>{dep.title}</h2>
-                    <MTable headers={headers} bodies={dep.stuff}/>
+                    <MTable headers={headers} bodies={dep.stuff} image={true}/>
                 </div>)
             }
 

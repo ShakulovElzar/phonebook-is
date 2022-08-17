@@ -30,19 +30,12 @@ const Search = () => {
 		postData.searchScope = searchScope
 	}
 
-	
-
-	
-
 	const changeQueryType = (value) => {
 		setQueryWordsMatch(value)
 	}
-
 	const changeSearchOrdering = (value) => {
 		setSearchOrder(value)
 	}
-	
-
 
     return (
         <div className='page-body'>
@@ -51,7 +44,6 @@ const Search = () => {
 		        <button  className="search__btn" onClick={() => search()}>
 			        Искать
                 </button>
-		        <input type="hidden" name="task" value="search"/>
 	        </div>
             <fieldset className="search__phrases search__fieldset">
 		        <legend className="search__fieldset_legend">Совпадение</legend>

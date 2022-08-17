@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 const ProfcomPostPage = () => {
     const params = useParams();
     return (
-        <div>
+        <div className='page-body'>
             <h1>ProfcomPostPage number {params.id}</h1>
         </div>
     );

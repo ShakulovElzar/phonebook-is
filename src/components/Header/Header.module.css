@@ -15,3 +15,26 @@
     font-size: 11px;
     color: gray;
 }
+
+@media all and (max-width: 1248px) {
+    .phonebook{
+        font-size: 14px;
+    }
+    .phonebook__reporter{
+        font-size: 9px;
+    }
+    .link{
+        padding: 15px 0;
+    }
+}
+@media all and (max-width: 768px) {
+    .phonebook{
+        font-size: 10px;
+    }
+    .phonebook__reporter{
+        font-size: 7px;
+    }
+    .link{
+        padding: 10px 0;
+    }
+}

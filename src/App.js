@@ -10,8 +10,9 @@ import { useEffect } from 'react';
 import { AuthContext } from './context/';
 
 function App() {
-  const [isAuth, setIsAuth] = useState(true);
+  const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [IP, setIP] = useState("")
   const [page, setPage] = useState(1)
 
 
@@ -20,7 +21,17 @@ function App() {
     let localPage = localStorage.getItem("page")
     setPage(parseInt(localPage))
 
-    
+    // get IP
+    let apiKey = '1be9a6884abd4c3ea143b59ca317c6b2';
+    fetch('https://ipgeolocation.abstractapi.com/v1/?api_key=' + apiKey)
+        .then(response => response.json())
+        .then(data => {
+          setIP(data.ip_address)
+        });
+
+    if(localStorage.getItem("IP") !== null){
+      setIsAuth(true)
+    }
 
     if(localStorage.getItem('auth')){
       setIsAuth(true)
@@ -32,14 +43,15 @@ function App() {
     <AuthContext.Provider value={{
       isAuth,
       setIsAuth, 
-      isLoading
+      isLoading,
+      IP
     }}>
       <BrowserRouter>
         <Header />
         <div className="App">
 
           <Navbar page={page} setPage={setPage}/>
-          <AppRouter setPage={setPage}/>
+          <AppRouter setPage={setPage} page={page}/>
         
         </div>
       </BrowserRouter>

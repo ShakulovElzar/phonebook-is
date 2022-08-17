@@ -8,7 +8,7 @@ import {useContext} from 'react';
 
 
 const Login = (props) => {
-    let {setIsAuth} = useContext(AuthContext);
+    let {setIsAuth, IP} = useContext(AuthContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState(false);
@@ -35,14 +35,17 @@ const Login = (props) => {
 				setEmailError("Неправильный логин")
 			}
 		});
-
         if (response === undefined) return;
-        sessionStorage.setItem("atoken", response.data.access);
-        sessionStorage.setItem("rtoken", response.data.refresh);
-        sessionStorage.setItem("user", response.data.email);
+        localStorage.setItem("atoken", response.data.access);
+        localStorage.setItem("rtoken", response.data.refresh);
+        localStorage.setItem("user", response.data.email);
+
         setIsAuth(true);
         props.setPage(1);
         localStorage.setItem("page", JSON.stringify(1));
+        if(rememberMe){
+            localStorage.setItem("IP", IP)
+        }
     };
 
     const emailHandler = (e) => {
@@ -54,7 +57,6 @@ const Login = (props) => {
             setEmailError('')
         }
     };
-
     const passwordHandler = (e) => {
         setPassword(e.target.value);
         if (e.target.value.length < 4 || e.target.value.length > 20) {
@@ -67,7 +69,6 @@ const Login = (props) => {
         }
 
     };
-
     const blurHandler = (e) => {
         switch (e.target.name) {
             case 'email':
@@ -113,7 +114,7 @@ const Login = (props) => {
                         Войти
                     </button>
 
-<div className="login__rememberme">
+    <div className="login__rememberme">
                         <label>Запомнить меня</label>
                         <input type="checkbox" value={rememberMe} onClick={() => {
 							if(rememberMe === false) {

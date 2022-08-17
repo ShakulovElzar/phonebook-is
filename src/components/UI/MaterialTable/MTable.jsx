@@ -40,6 +40,17 @@ const MTable = (props) => {
                 <TableBody>
 
                     {
+                        !props.image
+                            ?
+                            props.bodies.map((el, index) =>
+                                <TableRow key={index}>
+                                    {el.map((data, index) => <TableCell key={index}>
+                                        {data}
+                                        </TableCell>
+                                    )}
+                                </TableRow>
+                            )
+                            :
                         props.bodies.map((el, index) =>
                                 <TableRow key={index}>
                                     {el.map((data, index) => <TableCell key={index}>
@@ -55,8 +66,6 @@ const MTable = (props) => {
                                 </TableRow>
                         )
                     }
-
-                    {}
                    
                 </TableBody>
             </Table>

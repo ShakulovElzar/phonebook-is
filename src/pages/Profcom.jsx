@@ -4,11 +4,6 @@ import { Paper } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import {useNavigate} from "react-router-dom";
 
-const Item = styled(Paper)(() => ({
-  width: 515,
-  height: 320,
-}));
-
 const Profcom = () => {
 
     const items = [
@@ -64,7 +59,7 @@ const Profcom = () => {
 const CarouselItem = (props) => {
     const navigate = useNavigate();
     return (
-        <Item className="carousel__item" onClick={() => {
+        <div className="carousel__item" onClick={() => {
             navigate(`/profcom/${(props.id)}`)
         }}>
                 <video
@@ -72,9 +67,9 @@ const CarouselItem = (props) => {
                     loop={true}
                     id="video"
                     src={props.content}
-                    style={{width: 515, height: 320}}
+                    className="carousel__video"
                 ></video>
-        </Item>
+        </div>
     );
 };
 

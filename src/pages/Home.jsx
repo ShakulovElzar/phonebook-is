@@ -24,7 +24,7 @@ const Home = () => {
 
 
     return (
-        <div className="home-body">
+        <div className="page-body">
             <p className={c.homeText}>Структура</p>
 
             <MyTable page="department" tableData={tableData}/>
