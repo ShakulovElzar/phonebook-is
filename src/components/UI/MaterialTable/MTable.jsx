@@ -17,7 +17,6 @@ const MTable = (props) => {
           }
         },
       });
-
     const StyledTableCell = styled(TableCell)(() => ({
         [`&.${tableCellClasses.head}`]: {
           backgroundColor: theme.palette.primary.dark,
@@ -27,6 +26,14 @@ const MTable = (props) => {
         },
       }));
 
+
+    props.bodies.forEach((el) =>
+        Object.entries(el).forEach(([key, value]) => {
+            if(key === "id" || key === "category"){
+                delete el[key]
+            }
+        })
+    );
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
@@ -42,22 +49,23 @@ const MTable = (props) => {
                             ?
                             props.bodies.map((el, index) =>
                                 <TableRow key={index}>
-                                    {Object.entries(el).map(([key, value]) => <TableCell key={key}>
-                                        {value}
+                                    {Object.entries(el).map(([key, value]) =>
+                                        <TableCell key={key}>
+                                            {value}
                                         </TableCell>
                                     )}
                                 </TableRow>
                             )
                             :
-                        props.bodies.map((el, index) =>
+                            props.bodies.map((el, index) =>
                                 <TableRow key={index}>
-                                    {el.map((data, index) => <TableCell key={index}>
+                                    {Object.entries(el).map(([key, value]) => <TableCell key={key}>
                                             {
                                                 index === 0
                                                     ?
-                                                    <img src={data} alt="" />
+                                                    <img alt="" />
                                                     :
-                                                    data
+                                                    value
                                             }
                                         </TableCell>
                                     )}

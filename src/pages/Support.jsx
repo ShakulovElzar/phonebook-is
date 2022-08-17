@@ -11,7 +11,6 @@ const Support = () => {
 
     const sendReport = event => {
         event.preventDefault();
-        const token = localStorage.getItem("atoken");
 
         axios.post(
             'http://10.200.24.103:8089/help/create/',
@@ -22,13 +21,13 @@ const Support = () => {
             },
             {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${localStorage.getItem("atoken")}`
                 }
             }
         );
         setReportText("");
-        setReportIssue(1)
-        setReportDestination(1)
+        setReportIssue(1);
+        setReportDestination(1);
     };
 
     useEffect(() => {
@@ -37,12 +36,14 @@ const Support = () => {
                 "Authorization": `Bearer ${localStorage.getItem("atoken")}`
             }
         }).then(t => setOptions(t.data));
+
         axios.get("http://10.200.24.103:8089/help/worker/", {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("atoken")}`
             }
         }).then(t => setWorkers(t.data))
     }, []);
+
     return (
         <div className='page-body body-box'>
             <div className='help__header'>

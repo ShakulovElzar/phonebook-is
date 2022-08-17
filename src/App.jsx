@@ -7,21 +7,23 @@ import Navbar from './components/Navbar/Navbar';
 import { useState } from 'react';
 import AppRouter from './components/AppRouter';
 import { useEffect } from 'react';
-import { AuthContext } from './context/';
+import {AdminContext, AuthContext} from './context/';
 import Error from "./pages/Error";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [IP, setIP] = useState("")
-  const [page, setPage] = useState(1)
+  const [IP, setIP] = useState("");
+  const [page, setPage] = useState(1);
 
   // internet connection check
   let onlineBoolean = navigator.onLine;
 
   useEffect(() => {
-    let localPage = localStorage.getItem("page")
-    setPage(parseInt(localPage))
+    let localPage = localStorage.getItem("page");
+    setPage(parseInt(localPage));
 
     if (!onlineBoolean) return;
     // get IP
@@ -34,14 +36,13 @@ function App() {
 
     if(localStorage.getItem("IP") !== null){
       setIsAuth(true)
-    }
-
-    if(localStorage.getItem('auth')){
+    } else if(localStorage.getItem('auth')){
       setIsAuth(true)
     }
-    setIsLoading(false)
-  }, [])
 
+
+    setIsLoading(false)
+  }, []);
 
 
   return (
@@ -51,21 +52,27 @@ function App() {
       isLoading,
       IP
     }}>
-      <BrowserRouter>
-        <Header />
-        <div className="App">
+      <AdminContext.Provider value={{
+        isAdmin,
+        setIsAdmin,
+        isSuperAdmin,
+        setIsSuperAdmin
+      }}>
+        <BrowserRouter>
+          <Header />
+            <div className="App">
 
-          <Navbar page={page} setPage={setPage}/>
-          {
-            onlineBoolean
-              ?
-                <AppRouter setPage={setPage} page={page}/>
-              :
-                <Error/>
-          }
-
-        </div>
-      </BrowserRouter>
+              <Navbar page={page} setPage={setPage}/>
+                {
+                  onlineBoolean
+                      ?
+                      <AppRouter setPage={setPage} page={page}/>
+                      :
+                      <Error/>
+                }
+          </div>
+        </BrowserRouter>
+      </AdminContext.Provider>
     </AuthContext.Provider>
   );
 }

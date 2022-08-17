@@ -4,7 +4,6 @@ import axios from "axios";
 
 const Journal = () => {
     const [headers] = useState([
-        "Номер",
         "По причине",
         "ФИО",
         "Должность",
