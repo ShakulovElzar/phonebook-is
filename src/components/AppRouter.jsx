@@ -8,8 +8,6 @@ import Journal from '../pages/Journal';
 import Login from '../pages/Login';
 import Support from '../pages/Support';
 import DepartmentPostPage from '../pages/DepartmentPostPage';
-import ChangePassword from '../pages/login pages/ChangePassword';
-import ChangeEmail from '../pages/login pages/ChangeEmail';
 import Register from '../pages/login pages/Register';
 import NpaPostPage from '../pages/NpaPostPage';
 import { useContext } from 'react';
@@ -37,14 +35,12 @@ const AppRouter = (props) => {
                         <Route exact path="/profcom/:id" element={<ProfcomPostPage />} key="9"/>
                         <Route exact path="/search" element={<Search />} key="4"/>
                         <Route exact path="/journal" element={<Journal />} key="5"/>
-                        <Route exact path="/support" element={<Support />} key="6"/>
+                        <Route exact path="/support" element={<Support/>} key="6"/>
                         <Route path="*" element={<Navigate to="/departments" />}/>
                     </Routes>
                     :
                     <Routes>    
                         <Route exact path="/login" element={<Login setPage={props.setPage}/>} key="7" />
-                        <Route exact path='/login/update-password' element={<ChangePassword />} key="71"/>
-                        <Route exact path='/login/update-email' element={<ChangeEmail />} key="72"/>
                         <Route exact path='/login/register' element={<Register />} key="73"/>
                         <Route path="*" element={<Navigate to="/login" />}/>
                     </Routes>

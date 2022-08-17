@@ -48,18 +48,7 @@ const Login = (props) => {
             setEmailError('')
         }
     };
-    // const passwordHandler = (e) => {
-    //     setPassword(e.target.value);
-    //     if (e.target.value.length < 4 || e.target.value.length > 20) {
-    //         setPasswordError('Пароль не должен быть менее 4 символов');
-    //         if (!e.target.value) {
-    //             setPasswordError('Поле пароля не может быть пустым')
-    //         }
-    //     } else {
-    //         setPasswordError('')
-    //     }
-    //
-    // };
+
     const blurHandler = (e) => {
         switch (e.target.name) {
             case 'email':
@@ -84,19 +73,6 @@ const Login = (props) => {
                         }} type="text" value={email} className="login__input"/></div>
                 </div>
 
-                {/*<div className="login__control">*/}
-                {/*    <div className="login__label">*/}
-                {/*        <label id="password-lbl">*/}
-                {/*            Пароль **/}
-                {/*        </label>*/}
-                {/*        {(passwordDirty && passwordError) && <div style={{color: 'red', fontSize: '12px'}}>{passwordError}</div>}*/}
-                {/*        <input onBlur={e => blurHandler(e)} name='password' onChange={e => {*/}
-                {/*            setPassword(e.target.value);*/}
-                {/*            passwordHandler(e)*/}
-                {/*        }} type="password" value={password} className="login__input"/>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
-
                 <div className="submit__module">
                     <button type='submit' className="login__button">
                         Войти
@@ -114,15 +90,6 @@ const Login = (props) => {
             </form>
 
             <ul className="login__links">
-                {/*<li className="login__links_item">*/}
-                {/*    <Link to="/login/update-password">*/}
-                {/*        Забыли пароль?*/}
-                {/*    </Link>*/}
-                {/*</li>*/}
-                {/*<li className="login__links_item">*/}
-                {/*    <Link to="/login/update-email">*/}
-                {/*        Забыли логин? </Link>*/}
-                {/*</li>*/}
                 <li className="login__links_item">
                     <Link to="/login/register">
                         Ещё нет учётной записи?</Link>
@@ -133,3 +100,39 @@ const Login = (props) => {
 };
 
 export default Login;
+
+// const passwordHandler = (e) => {
+//     setPassword(e.target.value);
+//     if (e.target.value.length < 4 || e.target.value.length > 20) {
+//         setPasswordError('Пароль не должен быть менее 4 символов');
+//         if (!e.target.value) {
+//             setPasswordError('Поле пароля не может быть пустым')
+//         }
+//     } else {
+//         setPasswordError('')
+//     }
+//
+// };
+
+{/*<li className="login__links_item">*/}
+{/*    <Link to="/login/update-password">*/}
+{/*        Забыли пароль?*/}
+{/*    </Link>*/}
+{/*</li>*/}
+{/*<li className="login__links_item">*/}
+{/*    <Link to="/login/update-email">*/}
+{/*        Забыли логин? </Link>*/}
+{/*</li>*/}
+
+{/*<div className="login__control">*/}
+{/*    <div className="login__label">*/}
+{/*        <label id="password-lbl">*/}
+{/*            Пароль **/}
+{/*        </label>*/}
+{/*        {(passwordDirty && passwordError) && <div style={{color: 'red', fontSize: '12px'}}>{passwordError}</div>}*/}
+{/*        <input onBlur={e => blurHandler(e)} name='password' onChange={e => {*/}
+{/*            setPassword(e.target.value);*/}
+{/*            passwordHandler(e)*/}
+{/*        }} type="password" value={password} className="login__input"/>*/}
+{/*    </div>*/}
+{/*</div>*/}

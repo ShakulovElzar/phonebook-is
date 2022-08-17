@@ -365,3 +365,7 @@ fieldset{
     margin-left: 50px;
   }
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

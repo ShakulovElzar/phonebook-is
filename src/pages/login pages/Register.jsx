@@ -25,9 +25,10 @@ const Register = () => {
         };
         reader.readAsDataURL(file);
     }
-    useEffect(async () => {
-        await axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setDepartments(t.data));
-        await axios.get("http://10.200.24.103:8089/jobtitle/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setJobTitles(t.data));
+
+    useEffect(() => {
+        axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setDepartments(t.data));
+        axios.get("http://10.200.24.103:8089/jobtitle/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setJobTitles(t.data));
     }, []);
 
     const registerForm = async (event) => {
@@ -49,7 +50,6 @@ const Register = () => {
         if(response){
             setChangeContent(true)
         }
-        console.log(response)
     };
 
     return (

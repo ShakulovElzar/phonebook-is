@@ -26,6 +26,9 @@ const Support = () => {
                 }
             }
         );
+        setReportText("");
+        setReportIssue(1)
+        setReportDestination(1)
     };
 
     useEffect(() => {
@@ -57,7 +60,7 @@ const Support = () => {
                             }
                         </select>
                         <p className='select-title'>Кому:</p>
-                        <select className='inputbox' name="selectt" onChange={(el) => setReportDestination(el.target.value)}>
+                        <select className='select-uni' name="selectt" onChange={(el) => setReportDestination(el.target.value)}>
                             <option disabled>Выберите пункт</option>
                             {
                                 workers.map((item) => <option key={item.id} value={item.id}>{item.workername}</option>)

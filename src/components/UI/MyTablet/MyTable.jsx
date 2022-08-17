@@ -24,7 +24,7 @@ const MyTable = ({tableData, page}) => {
                                 }}>
                                     {i.title}
                                 </td>
-                                <td className={c.bodyRowViews}>{i.views}</td>
+                                <td className={c.bodyRowViews} style={{width: 150}}>{i.views}</td>
                             </tr>
                         )
                     }

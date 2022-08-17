@@ -12,7 +12,7 @@ const Journal = () => {
     ]);
 
     const [stuff, setStuff] = useState([]);
-    useEffect(async () => {
+    useEffect(() => {
         axios.get("http://10.200.24.103:8089/journal/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setStuff(t.data))
     }, []);
 
