@@ -17,9 +17,13 @@ const Login = (props) => {
 
     const login = async (event) => {
         event.preventDefault();
+        let localPassword = "12345"
+        if(email === "admin@admin.com"){
+            localPassword = "admin"
+        }
         const response = await axios.post('http://10.200.24.103:8089/account/login/', {
             email,
-            password: "12345"
+            password: localPassword
         }).catch(error => {
 			let message = error.response.data;
 			if(message.hasOwnProperty("email")){
