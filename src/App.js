@@ -8,6 +8,7 @@ import { useState } from 'react';
 import AppRouter from './components/AppRouter';
 import { useEffect } from 'react';
 import { AuthContext } from './context/';
+import Error from "./pages/Error";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -15,12 +16,14 @@ function App() {
   const [IP, setIP] = useState("")
   const [page, setPage] = useState(1)
 
-
+  // internet connection check
+  let onlineBoolean = navigator.onLine;
 
   useEffect(() => {
     let localPage = localStorage.getItem("page")
     setPage(parseInt(localPage))
 
+    if (!onlineBoolean) return;
     // get IP
     let apiKey = '1be9a6884abd4c3ea143b59ca317c6b2';
     fetch('https://ipgeolocation.abstractapi.com/v1/?api_key=' + apiKey)
@@ -38,7 +41,9 @@ function App() {
     }
     setIsLoading(false)
   }, [])
-  
+
+
+
   return (
     <AuthContext.Provider value={{
       isAuth,
@@ -51,8 +56,14 @@ function App() {
         <div className="App">
 
           <Navbar page={page} setPage={setPage}/>
-          <AppRouter setPage={setPage} page={page}/>
-        
+          {
+            onlineBoolean
+              ?
+                <AppRouter setPage={setPage} page={page}/>
+              :
+                <Error/>
+          }
+
         </div>
       </BrowserRouter>
     </AuthContext.Provider>
