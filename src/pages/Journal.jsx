@@ -1,24 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MTable from "../components/UI/MaterialTable/MTable";
+import axios from "axios";
 
 const Journal = () => {
-    const [headers, setHeaders] = useState([
+    const [headers] = useState([
+        "Номер",
+        "По причине",
         "ФИО",
         "Должность",
-        "По причине",
         "Отпросился у",
     ]);
 
-    const [stuff, setStuff] = useState([
-        ["Сарбанова Анжелика Николаевна", "Заведующий отделом", "Болезнь", "у кого-то"],
-        ["Шаршенова Токтобубу Джолдошовна", "Главный специалист", "Болезнь", "у кого-то"],
-        ["Сарбанова Анжелика Николаевна", "Заведующий отделом", "Болезнь", "у кого-то"],
-        ["Шаршенова Токтобубу Джолдошовна", "Главный специалист", "Болезнь", "у кого-то"],
-        ["Сарбанова Анжелика Николаевна", "Заведующий отделом", "Болезнь", "у кого-то"],
-        ["Шаршенова Токтобубу Джолдошовна", "Главный специалист", "Болезнь", "у кого-то"],
-        ["Сарбанова Анжелика Николаевна", "Заведующий отделом", "Болезнь", "у кого-то"],
-        ["Шаршенова Токтобубу Джолдошовна", "Главный специалист", "Болезнь", "у кого-то"],
-    ]);
+    const [stuff, setStuff] = useState([]);
+    useEffect(async () => {
+        axios.get("http://10.200.24.103:8089/journal/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setStuff(t.data))
+    }, []);
 
     return (
         <div className='page-body'>

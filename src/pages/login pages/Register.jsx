@@ -1,30 +1,37 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 
 const Register = () => {
-    const [changeContent, setChangeContent] = useState(false)
+    const [changeContent, setChangeContent] = useState(false);
 
-    const [fullname, setFullname] = useState("")
-    const [email, setEmail] = useState("")
-    const [intATC, setIntATC] = useState("")
-    const [legalATC, setLegalATC] = useState("")
-    const [cityATC, setCityATC] = useState("")
-    const [cabinet, setCabinet] = useState("")
-    const [department, setDepartment] = useState("")
-    const [jobtitle, setJobTitle] = useState("")
-    const [photo, setPhoto] = useState(null)
+    const [fullname, setFullname] = useState("");
+    const [email, setEmail] = useState("");
+    const [intATC, setIntATC] = useState("");
+    const [legalATC, setLegalATC] = useState("");
+    const [cityATC, setCityATC] = useState("");
+    const [cabinet, setCabinet] = useState("");
+    const [departments, setDepartments] = useState([]);
+    const [department, setDepartment] = useState(1);
+    const [jobtitles, setJobTitles] = useState([]);
+    const [jobtitle, setJobTitle] = useState(1);
+    const [photo, setPhoto] = useState(null);
+
 
     function encodeImageFileAsURL(file) {
         var reader = new FileReader();
         reader.onloadend = function() {
             setPhoto(reader.result)
-        }
+        };
         reader.readAsDataURL(file);
     }
+    useEffect(async () => {
+        await axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setDepartments(t.data));
+        await axios.get("http://10.200.24.103:8089/jobtitle/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setJobTitles(t.data));
+    }, []);
 
     const registerForm = async (event) => {
-        event.preventDefault()
+        event.preventDefault();
 
         const response = await axios.post('http://10.200.24.103:8089/account/register/', {
             email,
@@ -37,13 +44,13 @@ const Register = () => {
             department,
             jobtitle,
             photo
-        })
+        });
 
         if(response){
             setChangeContent(true)
         }
         console.log(response)
-    }
+    };
 
     return (
         <div className='page-body'>
@@ -61,25 +68,36 @@ const Register = () => {
                                 <label className="invalid">
                                     ФИО<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setFullname(i.target.value)} value={fullname} className="register__input"></input>
+                                <input required type="text" onChange={(i) => setFullname(i.target.value)} value={fullname} className="register__input"/>
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Адрес электронной почты<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setEmail(i.target.value)} value={email} className="register__input"></input>
+                                <input required type="text" onChange={(i) => setEmail(i.target.value)} value={email} className="register__input"/>
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Департамент<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setDepartment(i.target.value)} value={department} className="register__input"></input>
+
+                                <select className="select-uni register__deparment" required name="department-select" onChange={(t) => setDepartment(t.target.value)}>
+                                    {
+                                        departments.map((item) => <option value={item.id}>{item.title}</option>)
+                                    }
+                                </select>
+                                {/*<input required type="text" onChange={(i) => setDepartment(i.target.value)} value={department} className="register__input"></input>*/}
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Должность<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setJobTitle(i.target.value)} value={jobtitle} className="register__input"></input>
+                                <select className="select-uni register__deparment" required name="department-select" onChange={(t) => setJobTitle(t.target.value)}>
+                                    {
+                                        jobtitles.map((item) => <option value={item.id}>{item.jobtitle}</option>)
+                                    }
+                                </select>
+                                {/*<input required type="text" onChange={(i) => setJobTitle(i.target.value)} value={jobtitle} className="register__input"></input>*/}
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
@@ -95,31 +113,31 @@ const Register = () => {
                                     type="file"
                                     className="register__input__photo"
                                     accept=".jpg, .jpeg, .png"
-                                ></input>
+                                />
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Внутренний АТС<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setIntATC(i.target.value)} value={intATC} className="register__input"></input>
+                                <input required type="text" onChange={(i) => setIntATC(i.target.value)} value={intATC} className="register__input"/>
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Правовой АТС
                                 </label>
-                                <input type="text" onChange={(i) => setLegalATC(i.target.value)} value={legalATC} className="register__input"></input>
+                                <input type="text" onChange={(i) => setLegalATC(i.target.value)} value={legalATC} className="register__input"/>
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Городской АТС<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setCityATC(i.target.value)} value={cityATC} className="register__input"></input>
+                                <input required type="text" onChange={(i) => setCityATC(i.target.value)} value={cityATC} className="register__input"/>
                             </div>
                             <div className="register-input">
                                 <label className="invalid">
                                     Кабинет<span className="star">&nbsp;*</span>
                                 </label>
-                                <input required type="text" onChange={(i) => setCabinet(i.target.value)} value={cabinet} className="register__input"></input>
+                                <input required type="text" onChange={(i) => setCabinet(i.target.value)} value={cabinet} className="register__input"/>
                             </div>
                         </div>
                         <button

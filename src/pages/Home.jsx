@@ -9,7 +9,7 @@ const Home = () => {
     // table data fetching
     const [tableData, setTableData] = useState([]);
     const getData = async () => {
-        const response = await axios.get("http://10.200.24.103:8089/department/");
+        const response = await axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
         const parentData = [];
         for (let i = 0; i < response.data.length; i++) {
             if (response.data[i].parent === null) {

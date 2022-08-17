@@ -138,6 +138,11 @@ header{
   margin: 15px 0;
 }
 
+.register__deparment{
+  margin-left: 15px;
+  margin-bottom: 20px;
+}
+
 /* search */
 
 .search__inputs{
@@ -188,7 +193,7 @@ fieldset{
   margin: 0 5px 0 0;
 }
 
-.inputbox{
+.select-uni{
   border: 1px solid #d4d0ba;
   border-radius: 2px;
   height: 40px;

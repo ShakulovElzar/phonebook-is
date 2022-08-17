@@ -27,8 +27,6 @@ const MTable = (props) => {
         },
       }));
 
-      
-
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
@@ -44,8 +42,8 @@ const MTable = (props) => {
                             ?
                             props.bodies.map((el, index) =>
                                 <TableRow key={index}>
-                                    {el.map((data, index) => <TableCell key={index}>
-                                        {data}
+                                    {Object.entries(el).map(([key, value]) => <TableCell key={key}>
+                                        {value}
                                         </TableCell>
                                     )}
                                 </TableRow>
