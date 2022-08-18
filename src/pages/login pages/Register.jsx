@@ -27,7 +27,16 @@ const Register = () => {
     }
 
     useEffect(() => {
-        axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setDepartments(t.data));
+        axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((response) => {
+            const parentData = [];
+            for (let i = 0; i < response.data.length; i++) {
+                if (response.data[i].parent !== null) {
+                    parentData.push(response.data[i])
+                }
+            }
+            setDepartments(parentData)
+        });
+
         axios.get("http://10.200.24.103:8089/jobtitle/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setJobTitles(t.data));
     }, []);
 

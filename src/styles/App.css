@@ -369,3 +369,20 @@ fieldset{
 ::-webkit-scrollbar {
   display: none;
 }
+
+.show-arrow{
+  display: inline-block;
+  margin-left: 15px;
+  width: 25px;
+  height: 25px;
+  transform: rotate(90deg);
+}
+.admin-form__wrapper {
+  border: 1px solid black;
+  padding: 20px;
+}
+
+.user__photo{
+  width: 70px;
+  height: 100px;
+}

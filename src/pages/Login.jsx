@@ -17,7 +17,7 @@ const Login = (props) => {
 
     const login = async (event) => {
         event.preventDefault();
-        let localPassword = "12345"
+        let localPassword = "12345";
         if(email === "admin@admin.com"){
             localPassword = "admin"
         }
@@ -52,7 +52,6 @@ const Login = (props) => {
             setEmailError('')
         }
     };
-
     const blurHandler = (e) => {
         switch (e.target.name) {
             case 'email':

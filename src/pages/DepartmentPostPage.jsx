@@ -1,52 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import MTable from '../components/UI/MaterialTable/MTable';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import {createTheme, styled} from "@mui/system";
+import Paper from "@mui/material/Paper";
+import TableHead from "@mui/material/TableHead";
 
 const DepartmentPostPage = () => {
     const params = useParams();
     const [depName, setDepName] = useState("");
-    // an example of data
-    const postData = {
-        bossData: {
-            image: "..\images\atcimage.jpeg",
-            position: "Начальник управления",
-            fullName: "Бакетаев Алмаз Кушбекович",
-            internalATC: 1000,
-            number: "66-04-04",
-            email: "t.aidarbekov@minfin.kg"
-        },
-        innerDepartments: [
-            {
-                title: "Отдел консолидации государственного бюджета",
-                stuff: [
-                    // ["https://picsum.photos/130/180", "", "", "", "", "", ""],
-                    ["https://picsum.photos/70/100", "Сарбанова Анжелика Николаевна", "Заведующий отделом", "1112", "62-53-13", "a.sarbanova@minfin.kg", "213"],
-                    ["https://picsum.photos/70/100", "Шаршенова Токтобубу Джолдошовна", "Главный специалист", "1121", "62-53-13", "t.sharshenova@minfin.kg", "219"],
-                ]
-            },
-            {
-                title: "Отдел методологии, анализа бюджета и оценки фискальных рисков",
-                stuff: [
-                    ["https://picsum.photos/70/100", "Сарбанова Анжелика Николаевна", "Заведующий отделом", "1112", "62-53-13", "a.sarbanova@minfin.kg", "213"],
-                    ["https://picsum.photos/70/100", "Шаршенова Токтобубу Джолдошовна", "Главный специалист", "1121", "62-53-13", "t.sharshenova@minfin.kg", "219"],
-                ]
-            },
-            {
-                title: "Отдел среднесрочной политики и программного бюджетирования",
-                stuff: [
-                    ["https://picsum.photos/70/100", "Сарбанова Анжелика Николаевна", "Заведующий отделом", "1112", "62-53-13", "a.sarbanova@minfin.kg", "213"],
-                    ["https://picsum.photos/70/100", "Шаршенова Токтобубу Джолдошовна", "Главный специалист", "1121", "62-53-13", "t.sharshenova@minfin.kg", "219"],
-                ]
-            }
-        ]
-    };
-
+    const [tablesData, setTablesData] = useState([]);
+    const [usersData, setUsersData] = useState([]);
     const [headers, setHeaders] = useState([
         "Фото",
         "ФИО",
@@ -56,49 +24,99 @@ const DepartmentPostPage = () => {
         "E-MAIL",
         "КАБИНЕТ",
     ]);
-    
+
     const getPostData = async () => {
         const response = await axios.get(`http://10.200.24.103:8089/department/${params.id}/`);
         setDepName(response.data.title);
+
+        const responseDep = await axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).catch(error => console.log(error));
+        const childData = [];
+        const intUsersData = [];
+        for (let i = 0; i < responseDep.data.length; i++) {
+            if (responseDep.data[i].parent === response.data.title) {
+                childData.push(responseDep.data[i]);
+                intUsersData.push(responseDep.data[i].users);
+            }
+        }
+        console.log(intUsersData);
+        setTablesData(childData);
+        setUsersData(intUsersData);
     };
 
     useEffect(() => {
         getPostData()
     }, []);
 
+    // themes for tables
+    const theme = createTheme({
+        palette: {
+            primary: {
+                dark: '#bdbdbd',
+            }
+        },
+    });
+    const StyledTableCell = styled(TableCell)(() => ({
+        [`&.${tableCellClasses.head}`]: {
+            backgroundColor: theme.palette.primary.dark,
+        },
+        [`&.${tableCellClasses.body}`]: {
+            fontSize: 14,
+        },
+    }));
 
-    
     return (
         <div className='page-body'>
             <h1 style={{color: "black"}}>{depName}</h1>
             <p>Печать(пусто)</p>
             <br/>
-            <TableContainer>
-                <Table aria-label="simple table">
-                    <TableBody>
-                        <TableRow>
-                            <TableCell align='right'>
-                                {/* <img src={postData.bossData.image} alt="фото начальника" /> */}
-                                <img src='https://picsum.photos/130/180' alt="фото начальника" />
-                            </TableCell>
-                            <TableCell>
-                                <h3>{postData.bossData.position}</h3>
-                                <p>{postData.bossData.fullName}</p>
-                                <p><strong>Внут.АТС:</strong> {postData.bossData.internalATC}</p>
-                                <p><strong>Тел.:</strong> {postData.bossData.number}</p>
-                                <p><strong>e-mail:</strong> {postData.bossData.email}</p>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
-
             {
-                postData.innerDepartments.map((dep, index) => <div key={index} className='deparment__block'>
-                    <h2>{dep.title}</h2>
-                    <MTable headers={headers} bodies={dep.stuff} image={true}/>
-                </div>)
+                tablesData.map((item, mainIndex) =>
+                    <div key={mainIndex}>
+                        <h3>{item.title}</h3>
+                        <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                    <TableRow>
+                                        {headers.map((el, index) => <StyledTableCell key={index} align="center"><strong>{el}</strong></StyledTableCell>)}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        usersData[mainIndex].map((el, index) =>
+                                            <TableRow key={index}>
+                                                {console.log(usersData)}
+                                                <TableCell align="center">
+                                                    <img src={el.photo} alt="Фото" className='user__photo'/>
+                                                </TableCell>
+                                                <TableCell>
+                                                    {el.fullname}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {el.jobtitle}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {el.internal_atc}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {el.city_atc}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {el.email}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {el.cabinet}
+                                                </TableCell>
+                                            </TableRow>
+                                        )
+                                    }
+
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </div>
+                )
             }
+
 
         </div>
     );

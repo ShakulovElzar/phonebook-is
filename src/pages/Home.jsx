@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useRef} from 'react';
 import MyTable from '../components/UI/MyTablet/MyTable';
 import c from './pages.module.css';
 import axios from 'axios';
@@ -8,16 +8,18 @@ import {AdminContext} from "../context";
 
 const Home = () => {
     const {isSuperAdmin} = useContext(AdminContext);
-    const [parentDepartment, setParentDepartment] = useState(1);
+    const parentDepartment = useRef();
+    const targetDepartment = useRef();
+    const parentRefDepartment = useRef();
+    const deletedDepartment = useRef();
     const [departmentTitle, setDepartmentTitle] = useState("");
-    const [deletedDepartment, setDeletedDepartment] = useState(1);
     const [wasSent, setWasSent] = useState(false);
     
     // table data fetching
     const [tableData, setTableData] = useState([]);
     const [allDepartments, setAllDepartments] = useState([]);
     const getData = async () => {
-        const response = await axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
+        const response = await axios.get("http://10.200.24.103:8089/department/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).catch(error => console.log(error));
         setAllDepartments(response.data);
         const parentData = [];
         for (let i = 0; i < response.data.length; i++) {
@@ -33,10 +35,14 @@ const Home = () => {
 
     const addDepartment = (event) => {
         event.preventDefault();
+        let localParent = parentDepartment.current.value;
+        if(localParent === "Без родителя"){
+            localParent = null;
+        }
         axios.post("http://10.200.24.103:8089/department/create/",
             {
                 title: departmentTitle,
-                parent: parentDepartment
+                parent: localParent
             },
             {
                 headers: {
@@ -46,15 +52,36 @@ const Home = () => {
         setWasSent(true);
         setTimeout(() => {
             setWasSent(false)
-        }, 5000)
+        }, 5000);
+        setTimeout(() => getData(), 1000)
     };
-
-    const deleteDepartment = () => {
-        axios.delete(`http://10.200.24.103:8089/department/delete/${deletedDepartment}/`, {
+    const deleteDepartment = (event) => {
+        event.preventDefault();
+        axios.delete(`http://10.200.24.103:8089/department/delete/${deletedDepartment.current.value}/`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("atoken")}`
             }
-        })
+        });
+        setTimeout(() => getData(), 1000)
+    };
+    const updateDepartment = (event) => {
+        event.preventDefault();
+        let localParent = parentRefDepartment.current.value;
+        if(localParent === "Без родителя"){
+            localParent = null;
+        }
+        axios.patch(`http://10.200.24.103:8089/department/update/${targetDepartment.current.value}/`,
+            {
+                title: departmentTitle,
+                id: targetDepartment.current.value,
+                parentDepartment: localParent
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("atoken")}`
+            }
+            });
+        setTimeout(() => getData(), 1000)
     };
 
     const checkId =(id) => {
@@ -64,29 +91,34 @@ const Home = () => {
             return false
         }
     };
+    let [showAdd, setShowAdd] = useState(false);
+    let [showDel, setShowDel] = useState(false);
+    let [showUpd, setShowUpd] = useState(false);
 
     return (
         <div className="page-body">
             {
                 isSuperAdmin &&
                     <>
-                    <div style={{border: "1px solid black", padding: 20}}>
-                        <h2>Заполнение нового департамента</h2>
-                        <form onSubmit={addDepartment}>
+                        {/*add department*/}
+                        <div className='admin-form__wrapper'>
+                        <h2 style={{display: "inline-block"}}>Заполнение нового департамента</h2>
+                        <img onClick={() => {
+                            if (showAdd){
+                                setShowAdd(false)
+                            } else {
+                                setShowAdd(true)
+                            }
+                        }} className='show-arrow' src="https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png" alt=""/>
+                        <form onSubmit={addDepartment} style={{display: showAdd ? "block" : "none"}}>
 
-                            <input className="login__input" type="text" value={departmentTitle} onChange={(i) => setDepartmentTitle(i.target.value)}/>
+                            <input placeholder="Название департамента" className="login__input" type="text" value={departmentTitle} onChange={(i) => setDepartmentTitle(i.target.value)}/>
                             <h5>Родительский департамент</h5>
-                            <select name="add-select" className="select-uni" onChange={(v) => {
-                                if(v.target.value === "Без родителя"){
-                                    setParentDepartment(null);
-                                    return;
-                                }
-                                setParentDepartment(v.target.value)
-                            }}>
-                                <option>Без родителя</option>
+                            <select ref={parentDepartment} name="add-select" className="select-uni">
+                                <option value={null}>Без родителя</option>
                                 {
-                                    tableData.map((item) =>
-                                        <option selected={checkId(item.id)} value={item.id}>{item.title}</option>
+                                    tableData.map((item, index) =>
+                                        <option key={index} defaultValue={checkId(item.id)} value={item.id} >{item.title}</option>
                                     )
                                 }
                             </select>
@@ -98,20 +130,71 @@ const Home = () => {
                                 <h1>Форма была отправлена!</h1>
                         }
                     </div>
+
                         <br/>
-                        <form style={{border: "1px solid black", padding: 20}} onSubmit={deleteDepartment}>
-                            <h2>Удалить департамент</h2>
-                            <select name="delete-department" className="select-uni" onChange={(v) => setDeletedDepartment(v.target.value)}>
-                                {
-                                    allDepartments.map((item) =>
-                                        <option selected={checkId(item.id)} value={item.id}>{item.title}</option>
-                                    )
+                        {/*delete department*/}
+                        <div className='admin-form__wrapper'>
+                            <h2 style={{display: "inline-block"}}>Удалить департамент</h2>
+                            <img onClick={() => {
+                                if (showDel){
+                                    setShowDel(false)
+                                } else {
+                                    setShowDel(true)
                                 }
-                            </select>
-                            <button type="submit" className='login__button' style={{marginLeft: 15}}>Удалить</button>
-                        </form>
+                                }} className='show-arrow' src="https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png" alt=""/>
+
+                                <form  onSubmit={deleteDepartment} style={{display: showDel ? "block" : "none"}}>
+                                <select ref={deletedDepartment} name="delete-department" className="select-uni">
+                                    {
+                                        allDepartments.map((item, index) =>
+                                            <option key={index} defaultValue={checkId(item.id)} value={item.id}>{item.title}</option>
+                                        )
+                                    }
+                                </select>
+                                <button type="submit" className='login__button' style={{marginLeft: 15}}>Удалить</button>
+                            </form>
+                        </div>
+
+                        <br/>
+                        {/*update department*/}
+                        <div className='admin-form__wrapper'>
+                            <h2 style={{display: "inline-block"}}>Изменить департамент</h2>
+                            <img onClick={() => {
+                                if (showUpd) {
+                                    setShowUpd(false)
+                                } else {
+                                    setShowUpd(true)
+                                }
+                            }} className='show-arrow' src="https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png" alt=""/>
+                            <form onSubmit={updateDepartment} style={{display: showUpd ? "block" : "none"}}>
+                                <input className="login__input" placeholder="Новое название департамента" type="text" value={departmentTitle} onChange={(i) => setDepartmentTitle(i.target.value)}/>
+                                <h5>Выберите департамент</h5>
+                                <select ref={targetDepartment} name="delete-department" className="select-uni">
+                                    {
+                                        allDepartments.map((item, index) =>
+                                            <option key={index} defaultValue={checkId(item.id)} value={item.id} >{item.title}</option>
+                                        )
+                                    }
+
+                                </select>
+                                <h5>Новый родительский департамент</h5>
+                                <select ref={parentRefDepartment} name="add-select" className="select-uni">
+                                    {
+                                        tableData.map((item, index) =>
+                                            <option key={index} defaultValue={checkId(item.id)} value={item.id}>{item.title}</option>
+                                        )
+                                    }
+                                    <option value={null}>Без родителя</option>
+                                </select>
+
+
+
+                                <button type="submit" className='login__button' style={{marginLeft: 15}}>Изменить</button>
+                            </form>
+                        </div>
                     </>
             }
+
             <p className={c.homeText}>Структура</p>
 
             <MyTable page="department" tableData={tableData}/>
