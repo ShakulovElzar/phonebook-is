@@ -10,7 +10,7 @@
 
 .table thead tr {
     background-color: rgb(172, 172, 172);
-    color: #199e81;
+    color: #1976d2;
 }
 
 .headBox{
@@ -28,7 +28,7 @@
 }
 
 .bodyRowTitle{
-    color: #199e81;
+    color: #1976d2;
 }
 .bodyRowTitle:hover{
     color: #000000;

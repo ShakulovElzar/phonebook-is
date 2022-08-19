@@ -1,6 +1,12 @@
 import React, {useEffect} from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import TextField from "@mui/material/TextField/TextField";
+import InputLabel from "@mui/material/InputLabel/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Button from "@mui/material/Button";
 
 const Register = () => {
     const [changeContent, setChangeContent] = useState(false);
@@ -64,7 +70,6 @@ const Register = () => {
     return (
         <div className='page-body'>
             <h1 style={{textAlign: 'center'}}>Регистрация пользователя:</h1>
-            <button onClick={()=>console.log(photo)}>dasd</button>
             {
                 changeContent
                     ?
@@ -74,86 +79,142 @@ const Register = () => {
                         <p>* Обязательное поле</p>
                         <div className="register-inputs">
                             <div className="register-input">
-                                <label className="invalid">
-                                    ФИО<span className="star">&nbsp;*</span>
-                                </label>
-                                <input required type="text" onChange={(i) => setFullname(i.target.value)} value={fullname} className="register__input"/>
+                                <p className="invalid">
+                                    ФИО
+                                </p>
+                                <TextField
+                                    id="outlined"
+                                    required
+                                    label="Пароль"
+                                    value={fullname}
+                                    fullWidth
+                                    onChange={(i) => setFullname(i.target.value)}
+                                />
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Адрес электронной почты<span className="star">&nbsp;*</span>
-                                </label>
-                                <input required type="text" onChange={(i) => setEmail(i.target.value)} value={email} className="register__input"/>
+                                <p className="invalid">
+                                    Адрес электронной почты
+                                </p>
+                                <TextField
+                                    id="outlined"
+                                    required
+                                    label="Пароль"
+                                    value={email}
+                                    fullWidth
+                                    onChange={(i) => setEmail(i.target.value)}
+                                />
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Департамент<span className="star">&nbsp;*</span>
-                                </label>
+                                <p className="invalid">
+                                    Департамент
+                                </p>
 
-                                <select className="select-uni register__deparment" required name="department-select" onChange={(t) => setDepartment(t.target.value)}>
-                                    {
-                                        departments.map((item) => <option value={item.id}>{item.title}</option>)
-                                    }
-                                </select>
-                                {/*<input required type="text" onChange={(i) => setDepartment(i.target.value)} value={department} className="register__input"></input>*/}
+                                <FormControl>
+                                    <InputLabel>Выбрать департамент</InputLabel>
+                                    <Select sx={{width: 350}} onChange={t => setDepartment(t.target.value)} label="Выбрать департамент">
+                                        {
+                                            departments.map((item, index) =>
+                                                <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                                            )
+                                        }
+                                    </Select>
+                                </FormControl>
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Должность<span className="star">&nbsp;*</span>
-                                </label>
-                                <select className="select-uni register__deparment" required name="department-select" onChange={(t) => setJobTitle(t.target.value)}>
-                                    {
-                                        jobtitles.map((item) => <option value={item.id}>{item.jobtitle}</option>)
-                                    }
-                                </select>
-                                {/*<input required type="text" onChange={(i) => setJobTitle(i.target.value)} value={jobtitle} className="register__input"></input>*/}
+                                <p className="invalid">
+                                    Должность
+                                </p>
+                                <FormControl>
+                                    <InputLabel>Выбрать должность</InputLabel>
+                                    <Select required sx={{width: 350}} onChange={t => setJobTitle(t.target.value)} label="Выбрать должность">
+                                        {
+                                            jobtitles.map((item, index) =>
+                                                <MenuItem key={index} value={item.id}>{item.jobtitle}</MenuItem>
+                                            )
+                                        }
+                                    </Select>
+                                </FormControl>
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Фото<span className="star">&nbsp;*</span>
-                                </label>
+                                <p className="invalid">
+                                    Фото
+                                </p>
                                 <input
                                     required
+                                    id="raised-button-file"
                                     onChange={(t) => {
                                         if(t !== undefined){
                                             encodeImageFileAsURL(t.target.files[0])
                                         }
                                     }}
                                     type="file"
-                                    className="register__input__photo"
+                                    style={{ display: 'none' }}
                                     accept=".jpg, .jpeg, .png"
+                                />
+                                <label htmlFor="raised-button-file">
+                                    <Button variant="contained" component="span">
+                                        Опубликовать
+                                    </Button>
+                                </label>
+                            </div>
+                            <div className="register-input">
+                                <p className="invalid">
+                                    Внутренний АТС
+                                </p>
+                                <TextField
+                                    id="outlined"
+                                    required
+                                    label="Внутренний АТС"
+                                    value={intATC}
+                                    fullWidth
+                                    onChange={(i) => setIntATC(i.target.value)}
                                 />
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Внутренний АТС<span className="star">&nbsp;*</span>
-                                </label>
-                                <input required type="text" onChange={(i) => setIntATC(i.target.value)} value={intATC} className="register__input"/>
-                            </div>
-                            <div className="register-input">
-                                <label className="invalid">
+                                <p className="invalid">
                                     Правовой АТС
-                                </label>
-                                <input type="text" onChange={(i) => setLegalATC(i.target.value)} value={legalATC} className="register__input"/>
+                                </p>
+                                <TextField
+                                    id="outlined"
+                                    required
+                                    label="Правовой АТС"
+                                    value={legalATC}
+                                    fullWidth
+                                    onChange={(i) => setLegalATC(i.target.value)}
+                                />
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Городской АТС<span className="star">&nbsp;*</span>
-                                </label>
-                                <input required type="text" onChange={(i) => setCityATC(i.target.value)} value={cityATC} className="register__input"/>
+                                <p className="invalid">
+                                    Городской АТС
+                                </p>
+                                <TextField
+                                    id="outlined"
+                                    required
+                                    label="Правовой АТС"
+                                    value={cityATC}
+                                    fullWidth
+                                    onChange={(i) => setCityATC(i.target.value)}
+                                />
                             </div>
                             <div className="register-input">
-                                <label className="invalid">
-                                    Кабинет<span className="star">&nbsp;*</span>
-                                </label>
-                                <input required type="text" onChange={(i) => setCabinet(i.target.value)} value={cabinet} className="register__input"/>
+                                <p className="invalid">
+                                    Кабинет
+                                </p>
+                                <TextField
+                                    id="outlined"
+                                    required
+                                    label="Кабинет"
+                                    value={cabinet}
+                                    fullWidth
+                                    onChange={(i) => setCabinet(i.target.value)}
+                                />
                             </div>
                         </div>
-                        <button
+                        <Button
                             type="submit"
-                            className="validate-button"
+                            variant="outlined"
                             style={{marginLeft: 0, marginTop: 20}}
-                        >Регистрация</button>
+                        >Регистрация</Button>
                     </form>
             }
 

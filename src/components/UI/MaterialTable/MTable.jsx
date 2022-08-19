@@ -25,15 +25,6 @@ const MTable = (props) => {
           fontSize: 14,
         },
       }));
-
-
-    props.bodies.forEach((el) =>
-        Object.entries(el).forEach(([key, value]) => {
-            if(key === "id" || key === "category"){
-                delete el[key]
-            }
-        })
-    );
     return (
         <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650}} stickyHeader aria-label="sticky table">
@@ -50,9 +41,17 @@ const MTable = (props) => {
                             props.bodies.map((el, index) =>
                                 <TableRow key={index}>
                                     {Object.entries(el).map(([key, value]) =>
-                                        <TableCell key={key}>
-                                            {value}
-                                        </TableCell>
+                                        <>
+                                        {
+                                            (key === "id" || key === "category")
+                                            ?
+                                                <></>
+                                            :
+                                                <TableCell key={key}>
+                                                    {value}
+                                                </TableCell>
+                                        }
+                                        </>
                                     )}
                                 </TableRow>
                             )

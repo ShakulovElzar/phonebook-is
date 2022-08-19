@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
+import Button from "@mui/material/Button";
 
 const Search = () => {
 	const [queryWordsMatch, setQueryWordsMatch] = useState("allWords")
@@ -41,9 +42,9 @@ const Search = () => {
         <div className='page-body'>
             <div className="search__inputs clearfix">
 		        <input type="text" placeholder="Текст для поиска" onChange={(t) => setInputText(t.target.value)} className="search__input" value={inputText}/>
-		        <button  className="search__btn" onClick={() => search()}>
+		        <Button variant="outlined" className="search__btn" onClick={() => search()}>
 			        Искать
-                </button>
+                </Button>
 	        </div>
             <fieldset className="search__phrases search__fieldset">
 		        <legend className="search__fieldset_legend">Совпадение</legend>

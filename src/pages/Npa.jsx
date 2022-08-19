@@ -4,13 +4,41 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import MyTable from '../components/UI/MyTablet/MyTable';
 import {AdminContext} from "../context";
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+
+function TabPanel(props) {
+    const { children, value, index } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+        >
+            {value === index && (
+                <Box sx={{ paddingTop: 1 }}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
 
 const Npa = () => {
     const {isSuperAdmin, isAdmin} = useContext(AdminContext);
     const [npaTitle, setNpaTitle] = useState("");
     const [wasSent, setWasSent] = useState(false);
-    const targetedNpa = useRef();
-    const deletedNpa = useRef();
+    const [targetedNpa, setTargetedNpa] = useState()
+    const [deletedNpa, setDeletedNpa] = useState()
 
     const [tableData, setTableData] = useState([]);
     const getData = async () => {
@@ -39,23 +67,21 @@ const Npa = () => {
         }, 3000)
         setTimeout(() => getData(), 1000)
     };
-
     const deleteNpa = (event) => {
         event.preventDefault();
-        axios.delete(`http://10.200.24.103:8089/npa/delete/${deletedNpa.current.value}/`, {
+        axios.delete(`http://10.200.24.103:8089/npa/delete/${deletedNpa}/`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem("atoken")}`
             }
         });
         setTimeout(() => getData(), 1000)
     };
-
     const updateNpa = (event) => {
         event.preventDefault();
-        axios.patch(`http://10.200.24.103:8089/npa/update/${targetedNpa.current.value}/`,
+        axios.patch(`http://10.200.24.103:8089/npa/update/${targetedNpa}/`,
             {
                 title: npaTitle,
-                id: targetedNpa.current.value,
+                id: targetedNpa,
             },
             {
                 headers: {
@@ -63,8 +89,7 @@ const Npa = () => {
                 }
             })
         setTimeout(() => getData(), 1000)
-    }
-
+    };
     const checkId =(id) => {
         if(id === 1) {
             return "selected"
@@ -73,88 +98,77 @@ const Npa = () => {
         }
     };
 
-    let [showAdd, setShowAdd] = useState(false)
-    let [showDel, setShowDel] = useState(false)
-    let [showUpd, setShowUpd] = useState(false)
+    const [value, setValue] = React.useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
     return (
         <div className='page-body'>
             {
                 (isSuperAdmin || isAdmin) &&
                     <>
-                        <div className='admin-form__wrapper'>
-                            <h2 style={{display: "inline-block"}}>Заполнение нового НПА</h2>
-                            <img onClick={() => {
-                                if (showAdd){
-                                    setShowAdd(false)
-                                } else {
-                                    setShowAdd(true)
-                                }
-                            }} className='show-arrow' src="https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png" alt=""/>
-                            <form onSubmit={addNpa} style={{display: showAdd ? "block" : "none"}}>
-                                <input placeholder="Название НПА" className="login__input" type="text" value={npaTitle} onChange={(i) => setNpaTitle(i.target.value)}/>
-                                <button type="submit" className='login__button' style={{marginLeft: 15}}>Добавить</button>
-                            </form>
-                            <br/>
-                            {
-                                wasSent &&
-                                <h1>Форма была отправлена!</h1>
-                            }
-                        </div>
-
-                        <br/>
-                        {/*delete department*/}
-                        <div className='admin-form__wrapper'>
-                            <h2 style={{display: "inline-block"}}>Удалить НПА</h2>
-                            <img onClick={() => {
-                                if (showDel){
-                                    setShowDel(false)
-                                } else {
-                                    setShowDel(true)
-                                }
-                            }} className='show-arrow' src="https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png" alt=""/>
-
-                            <form  onSubmit={deleteNpa} style={{display: showDel ? "block" : "none"}}>
-                                <select ref={targetedNpa} name="delete-department" className="select-uni">
+                        <Box sx={{ width: '100%' }}>
+                            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                                    <Tab label="Добавить"/>
+                                    <Tab label="Удалить"/>
+                                    <Tab label="Обновить"/>
+                                </Tabs>
+                            </Box>
+                            <TabPanel value={value} index={0}>
+                                <div className='admin-form__wrapper'>
+                                    <h2>Заполнение нового НПА</h2>
+                                    <form onSubmit={addNpa}>
+                                        <TextField fullWidth label="Название НПА" variant="outlined" value={npaTitle} onChange={(i) => setNpaTitle(i.target.value)}/>
+                                        <Button type="submit" variant="contained" size="large" style={{marginTop: 5}}>Добавить</Button>
+                                    </form>
+                                    <br/>
                                     {
-                                        tableData.map((item, index) =>
-                                            <option key={index} defaultValue={checkId(item.id)} value={item.id}>{item.title}</option>
-                                        )
+                                        wasSent &&
+                                        <h1>Форма была отправлена!</h1>
                                     }
-                                </select>
-                                <button type="submit" className='login__button' style={{marginLeft: 15}}>Удалить</button>
-                            </form>
-                        </div>
-
-                        <br/>
-                        {/*update department*/}
-                        <div className='admin-form__wrapper'>
-                            <h2 style={{display: "inline-block"}}>Изменить НПА</h2>
-                            <img onClick={() => {
-                                if (showUpd) {
-                                    setShowUpd(false)
-                                } else {
-                                    setShowUpd(true)
-                                }
-                            }} className='show-arrow' src="https://w7.pngwing.com/pngs/551/108/png-transparent-arrow-illustration-arrow-icon-right-arrow-angle-web-design-internet-thumbnail.png" alt=""/>
-
-
-                            <form onSubmit={updateNpa} style={{display: showUpd ? "block" : "none"}}>
-
-                                <input className="login__input" placeholder="Новое название департамента" type="text" value={npaTitle} onChange={(i) => setNpaTitle(i.target.value)}/>
-
-                                <h5>Выберите НПА</h5>
-
-                                <select ref={deletedNpa} name="delete-department" className="select-uni">
-                                    {
-                                        tableData.map((item, index) =>
-                                            <option key={index} defaultValue={checkId(item.id)} value={item.id} >{item.title}</option>
-                                        )
-                                    }
-
-                                </select>
-                                <button type="submit" className='login__button' style={{marginLeft: 15}}>Изменить</button>
-                            </form>
-                        </div>
+                                </div>
+                            </TabPanel>
+                            <TabPanel value={value} index={1}>
+                                <div className='admin-form__wrapper'>
+                                    <h2>Удалить НПА</h2>
+                                    <form  onSubmit={deleteNpa}>
+                                        <FormControl>
+                                            <InputLabel>Удалить НПА</InputLabel>
+                                            <Select sx={{width: 350}} onChange={t => setDeletedNpa(t.target.value)} label="Выбрать департамент">
+                                                {
+                                                    tableData.map((item, index) =>
+                                                        <MenuItem key={index} defaultValue={checkId(item.id)} value={item.id} >{item.title}</MenuItem>
+                                                    )
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                        <Button type="submit" variant="contained" size="large" style={{marginLeft: 15, marginTop: 5}}>Удалить</Button>
+                                    </form>
+                                </div>
+                            </TabPanel>
+                            <TabPanel value={value} index={2}>
+                                <div className='admin-form__wrapper'>
+                                    <h2>Изменить НПА</h2>
+                                    <form onSubmit={updateNpa}>
+                                        <TextField fullWidth label="Новое название НПА" variant="outlined" value={npaTitle} onChange={(i) => setNpaTitle(i.target.value)}/>
+                                        <h3>Выберите НПА</h3>
+                                        <FormControl>
+                                            <InputLabel>Выбрать НПА</InputLabel>
+                                            <Select sx={{width: 350}} onChange={t => setTargetedNpa(t.target.value)} label="Выбрать НПА">
+                                                {
+                                                    tableData.map((item, index) =>
+                                                        <MenuItem key={index} defaultValue={checkId(item.id)} value={item.id} >{item.title}</MenuItem>
+                                                    )
+                                                }
+                                            </Select>
+                                        </FormControl>
+                                        <Button type="submit" variant="contained" size="large" style={{marginLeft: 15, marginTop: 5}}>Изменить</Button>
+                                    </form>
+                                </div>
+                            </TabPanel>
+                        </Box>
                     </>
             }
             <h1>НПА</h1>

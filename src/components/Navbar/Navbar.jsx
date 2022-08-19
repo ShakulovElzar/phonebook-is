@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
 import { AuthContext } from '../../context';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 const Navbar = ({page, setPage}) => {
     const {isAuth, setIsAuth} = useContext(AuthContext)
@@ -28,26 +30,29 @@ const Navbar = ({page, setPage}) => {
     
     return (
         <div className="navbar">
+            <Stack spacing={2} direction="row">
             {
-                links.map(item => 
-                    <Link 
-                        to={item.to} 
-                        key={item.id} 
+                links.map(item =>
+                    <Link
+                        to={item.to}
+                        key={item.id}
                         onClick={() => {
-                            if(!isAuth) return
+                            if(!isAuth) return;
                             if(item.id === 7){
-                                setIsAuth(false)
-                                localStorage.removeItem("IP")
+                                setIsAuth(false);
+                                localStorage.removeItem("logindate");
                             }
                             setPage(item.id)
                             localStorage.setItem('page', JSON.stringify(item.id))
                         }}
-                        className={page == item.id ? "navbar__link active" : "navbar__link"}
                     >
-                        {item.name}
+                        <Button variant={page == item.id ? "contained" : "outlined"} style={{padding: '5px 25px'}}>
+                            {item.name}
+                        </Button>
                     </Link>
                 )
             }
+            </Stack>
         </div>
     );
 };

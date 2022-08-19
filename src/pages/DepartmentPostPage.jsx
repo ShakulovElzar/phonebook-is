@@ -38,7 +38,6 @@ const DepartmentPostPage = () => {
                 intUsersData.push(responseDep.data[i].users);
             }
         }
-        console.log(intUsersData);
         setTablesData(childData);
         setUsersData(intUsersData);
     };

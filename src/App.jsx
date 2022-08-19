@@ -25,22 +25,13 @@ function App() {
     let localPage = localStorage.getItem("page");
     setPage(parseInt(localPage));
 
-    if (!onlineBoolean) return;
-    // get IP
-    let apiKey = '1be9a6884abd4c3ea143b59ca317c6b2';
-    fetch('https://ipgeolocation.abstractapi.com/v1/?api_key=' + apiKey)
-        .then(response => response.json())
-        .then(data => {
-          setIP(data.ip_address)
-        });
-
-    if(localStorage.getItem("IP") !== null){
-      setIsAuth(true)
-    } else if(localStorage.getItem('auth')){
+    const d = new Date()
+    if(JSON.stringify(d.getDate()) === localStorage.getItem("logindate")){
       setIsAuth(true)
     }
-
-
+    if(!isAuth){
+      setPage(7)
+    }
     setIsLoading(false)
   }, []);
 

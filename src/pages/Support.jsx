@@ -1,5 +1,11 @@
 import axios from 'axios';
 import React, {useEffect, useState} from 'react';
+import InputLabel from "@mui/material/InputLabel/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 
 const Support = () => {
     const [reportIssue, setReportIssue] = useState(1);
@@ -47,32 +53,48 @@ const Support = () => {
     return (
         <div className='page-body body-box'>
             <div className='help__header'>
-                    <div className='help__header-title'>Нужна помощь?</div>
-                    <div className='help__header-description'>Оставьте своё сообщение и мы вам поможем</div>
-                    <div className='help__header-description'>В ответ на обращение на вашу почту придет сообщение.</div>
+                    <span className='help__header-title'>Нужна помощь?</span>
+                    <span className='help__header-description'>Оставьте своё сообщение и мы вам поможем</span>
+                    <span className='help__header-description'>В ответ на обращение на вашу почту придет сообщение.</span>
                 </div>
                 <form className='help__form' onSubmit={sendReport}>
                     <div className='form__inputs'>
                         <p className='select-title'>Что вам нужно?</p>
-                        <select className='select-uni' name="select" onChange={(el) => setReportIssue(el.target.value)}>
-                            <option disabled>Выберите пункт</option>
-                            {
-                                options.map((item) => <option key={item.id} value={item.id}>{item.choice}</option>)
-                            }
-                        </select>
+                        <FormControl>
+                            <InputLabel id="demo-simple-select-helper-label">Выберите пункт</InputLabel>
+                            <Select sx={{width: 400}} onChange={t => setReportIssue(t.target.value)} label="Выбрать пункт" labelId="demo-simple-select-helper-label">
+                                {
+                                    options.map((item, index) =>
+                                        <MenuItem key={index} value={item.id}>{item.choice}</MenuItem>
+                                    )
+                                }
+                            </Select>
+                        </FormControl>
                         <p className='select-title'>Кому:</p>
-                        <select className='select-uni' name="selectt" onChange={(el) => setReportDestination(el.target.value)}>
-                            <option disabled>Выберите пункт</option>
-                            {
-                                workers.map((item) => <option key={item.id} value={item.id}>{item.workername}</option>)
-                            }
-                        </select>
+                        <FormControl>
+                            <InputLabel id="demo-simple-select-helper-label">Выберите получателя</InputLabel>
+                            <Select sx={{width: 400}} onChange={t => setReportDestination(t.target.value)} label="Выбрать человека" labelId="demo-simple-select-helper-label">
+                                {
+                                    workers.map((item, index) =>
+                                        <MenuItem key={index} value={item.id}>{item.workername}</MenuItem>
+                                    )
+                                }
+                            </Select>
+                        </FormControl>
                         <div className='item-problem'>
                             <p>Опишите свою проблему</p>
-                            <textarea className='problem-textarea' placeholder='Сообщение' name="problem" id="problem" value={reportText} onChange={(el) => setReportText(el.target.value)}/>
+                            <TextField
+                                style={{marginBottom: 20, width: 400}}
+                                id="outlined-multiline-static"
+                                label="Сообщение"
+                                multiline
+                                rows={4}
+                                value={reportText}
+                                onChange={(el) => setReportText(el.target.value)}
+                            />
                         </div>
                     </div>
-                    <button type='submit' className='form-submit' style={{textTransform: 'uppercase'}}>Отправить</button>
+                    <Button type="submit" variant="contained" size="large" style={{marginTop: 5, textTransform: 'uppercase', marginLeft: 130}}>Отправить</Button>
                 </form>
         </div>
     );
