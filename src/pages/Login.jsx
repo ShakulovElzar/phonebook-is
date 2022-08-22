@@ -1,23 +1,22 @@
 import axios from 'axios';
-import React from 'react';
-import {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Link} from 'react-router-dom';
 import c from './pages.module.css'
-import {AuthContext} from '../context';
-import {useContext} from 'react';
+import {AdminContext, AuthContext} from '../context';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
 
 const Login = (props) => {
-    let {setIsAuth, IP} = useContext(AuthContext);
+    let {setIsAuth} = useContext(AuthContext);
+    let {setIsAdmin} = useContext(AdminContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState(false);
 
     const [emailDirty, setEmailDirty] = useState(false);
     const [emailError, setEmailError] = useState('Поле электронной почты не может быть пустым');
-    const [passwordError, setPasswordError] = useState("")
+    const [passwordError, setPasswordError] = useState("");
 
     const login = async (event) => {
         event.preventDefault();
@@ -28,7 +27,8 @@ const Login = (props) => {
         const response = await axios.post('http://10.200.24.103:8089/account/login/', {
             email,
             password: localPassword
-        }).catch(error => {
+        })
+            .catch(error => {
 			let message = error.response.data;
 			if(message.hasOwnProperty("email")){
                 setEmailError("Неправильный логин")
@@ -37,6 +37,18 @@ const Login = (props) => {
             }
 		});
         if (response === undefined) return;
+        axios.get('http://10.200.24.103:8089/account/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+            .then(t => {
+                for (let i = 0; i < t.data.length; i++) {
+                    if(t.data[i].email === response.data.email){
+                        if(t.data[i].is_staff){
+                            setIsAdmin(t.data[i].is_staff);
+                            localStorage.setItem("isAdmin", true);
+                        }
+                    }
+                }
+            });
+
         localStorage.setItem("atoken", response.data.access);
         localStorage.setItem("rtoken", response.data.refresh);
         localStorage.setItem("user", response.data.email);
@@ -45,7 +57,7 @@ const Login = (props) => {
         props.setPage(1);
         localStorage.setItem("page", JSON.stringify(1));
         if(rememberMe){
-            const d = new Date()
+            const d = new Date();
             localStorage.setItem("logindate", d.getDate())
         }
     };
@@ -102,6 +114,7 @@ const Login = (props) => {
                             label="Пароль"
                             value={password}
                             fullWidth
+                            type="password"
                             onChange={e => {
                                 setPassword(e.target.value);
                             }}

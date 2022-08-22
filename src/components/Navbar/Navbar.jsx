@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import { AuthContext } from '../../context';
+import {AuthContext} from '../../context';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 const Navbar = ({page, setPage}) => {
-    const {isAuth, setIsAuth} = useContext(AuthContext)
-    const [logName, setLogName] = useState("Войти")
+    const {isAuth, setIsAuth} = useContext(AuthContext);
+    const [logName, setLogName] = useState("Войти");
 
     const links = [
         {id: 1, to: '/departments', name: 'Главная'},
@@ -17,7 +17,7 @@ const Navbar = ({page, setPage}) => {
         {id: 6, to: '/support', name: 'Помощь'},
         {id: 7, to: '/login', name: logName}
         
-    ]
+    ];
 
     useEffect(() => {
         if(isAuth){
@@ -25,7 +25,7 @@ const Navbar = ({page, setPage}) => {
         } else {
             setLogName("Войти")
         }
-    }, [isAuth])
+    }, [isAuth]);
 
     
     return (
@@ -41,8 +41,9 @@ const Navbar = ({page, setPage}) => {
                             if(item.id === 7){
                                 setIsAuth(false);
                                 localStorage.removeItem("logindate");
+                                localStorage.removeItem("isAdmin");
                             }
-                            setPage(item.id)
+                            setPage(item.id);
                             localStorage.setItem('page', JSON.stringify(item.id))
                         }}
                     >

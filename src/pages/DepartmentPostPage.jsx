@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -83,7 +83,6 @@ const DepartmentPostPage = () => {
                                     {
                                         usersData[mainIndex].map((el, index) =>
                                             <TableRow key={index}>
-                                                {console.log(usersData)}
                                                 <TableCell align="center">
                                                     <img src={el.photo} alt="Фото" className='user__photo'/>
                                                 </TableCell>

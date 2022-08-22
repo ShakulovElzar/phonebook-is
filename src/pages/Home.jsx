@@ -1,9 +1,7 @@
-import React, {useContext, useRef} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import MyTable from '../components/UI/MyTablet/MyTable';
 import c from './pages.module.css';
 import axios from 'axios';
-import { useState } from 'react';
-import { useEffect } from 'react';
 import {AdminContext} from "../context";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -35,7 +33,7 @@ function TabPanel(props) {
 }
 
 const Home = () => {
-    const {isSuperAdmin} = useContext(AdminContext);
+    const {isAdmin} = useContext(AdminContext);
     const [parentDepartment, setParentDepartment] = useState();
     const [targetDepartment, setTargetDepartment] = useState();
     const [parentRefDepartment, setParentRefDepartment] = useState();
@@ -129,7 +127,7 @@ const Home = () => {
     return (
         <div className="page-body">
             {
-                isSuperAdmin &&
+                isAdmin &&
                     <>
                         <Box sx={{ width: '100%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

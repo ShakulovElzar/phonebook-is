@@ -340,10 +340,6 @@ fieldset{
   }
 }
 
-::-webkit-scrollbar {
-  display: none;
-}
-
 .show-arrow{
   display: inline-block;
   margin-left: 15px;
