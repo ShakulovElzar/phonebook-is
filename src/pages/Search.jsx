@@ -1,23 +1,22 @@
-import React from 'react';
-import { useState } from 'react';
+import React, {useState} from 'react';
 import Button from "@mui/material/Button";
 
 const Search = () => {
-	const [queryWordsMatch, setQueryWordsMatch] = useState("allWords")
-	const [searchOrder, setSearchOrder] = useState("newest")
-	const [inputText, setInputText] = useState("")
-	const postData = {}
+	const [queryWordsMatch, setQueryWordsMatch] = useState("allWords");
+	const [searchOrder, setSearchOrder] = useState("newest");
+	const [inputText, setInputText] = useState("");
+	const postData = {};
 	const searchScope = {
 		"categories": false,
 		"contacts": false,
 		"content": false,
 		"newsfeeds": false,
 		"tags": false
-	}
+	};
 	
 	const search = () => {
 		for(let i = 0; i < 5; i++) {
-			const arr = ["categories", "contacts", "content", "newsfeeds", "tags"]
+			const arr = ["categories", "contacts", "content", "newsfeeds", "tags"];
 			if(document.getElementById(`area-${arr[i]}`).checked){
 				searchScope[arr[i]] = true
 			} if(document.getElementById(`area-${arr[i]}`).checked === false){
@@ -25,18 +24,18 @@ const Search = () => {
 			} 
 		}
 
-		postData.inputText = inputText
-		postData.queryWordsMatch = queryWordsMatch
-		postData.searchOrder = searchOrder
+		postData.inputText = inputText;
+		postData.queryWordsMatch = queryWordsMatch;
+		postData.searchOrder = searchOrder;
 		postData.searchScope = searchScope
-	}
+	};
 
 	const changeQueryType = (value) => {
 		setQueryWordsMatch(value)
-	}
+	};
 	const changeSearchOrdering = (value) => {
 		setSearchOrder(value)
-	}
+	};
 
     return (
         <div className='page-body'>

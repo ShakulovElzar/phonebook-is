@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
+import {useParams} from 'react-router-dom';
 import axios from "axios";
-import MTable from "../components/UI/MaterialTable/MTable";
 
 const NpaPostPage = () => {
     const params = useParams();
@@ -25,16 +24,7 @@ const NpaPostPage = () => {
     return (
         <div className='page-body'>
             <h1>{pageData.title}</h1>
-            <MTable
-                headers={[
-                    "Должность",
-                    "ФИО",
-                    "Телефон",
-                    "Города/Область/Районы"
-                ]}
-                bodies={categories}
-
-            />
+            <p>{pageData.body}</p>
         </div>
     );
 };
