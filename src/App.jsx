@@ -19,16 +19,17 @@ function App() {
   let onlineBoolean = navigator.onLine;
 
   useEffect(() => {
-    setPage(localStorage.getItem("page"));
-
     const d = new Date();
     if(JSON.stringify(d.getDate()) === localStorage.getItem("logindate")){
       setIsAuth(true);
+      setPage(localStorage.getItem("page"));
       if(localStorage.getItem("isAdmin") !== undefined){
         setIsAdmin(true);
       }
+    } else if(JSON.stringify(d.getDate()) !== localStorage.getItem("logindate")){
+      setPage(7);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   }, []);
 
   return (

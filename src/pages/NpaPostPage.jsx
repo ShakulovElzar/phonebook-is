@@ -1,30 +1,55 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from "axios";
+import {AdminContext} from "../context";
+import Button from "@mui/material/Button";
+import Editor from "../components/Editor/Add";
 
 const NpaPostPage = () => {
+    const {isAdmin} = useContext(AdminContext);
     const params = useParams();
     const [pageData, setPageData] = useState([]);
-    const [categories, setCategories] = useState([]);
 
     const getData = async () => {
-        axios.get(`http://10.200.24.103:8089/npa/${params.id}`, {headers: {
-            Authorization: `Bearer ${localStorage.getItem("atoken")}`
-        }}).then((t) => {
+        axios.get(`http://10.200.24.103:8089/npa/${params.id}`, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("atoken")}`
+            }
+        }).then((t) => {
+            console.log(t.data);
             setPageData(t.data);
-            setCategories(t.data.categories);
+            if (t.data.categores[0] !== undefined) {
+                document.getElementById("post-data").innerHTML = JSON.stringify(t.data.categores[0].text)
+            }
         })
-
     };
-
     useEffect(() => {
-        getData()
+        getData();
     }, []);
 
+    const [toggleEditorClass, setToggleEditorClass] = useState(false);
     return (
         <div className='page-body'>
+            {
+                isAdmin &&
+                <div style={{color: "black"}}>
+                    <Button
+                        variant={toggleEditorClass ? "outlined" : "contained"}
+                        onClick={() => {
+                            if (toggleEditorClass) {
+                                setToggleEditorClass(false)
+                            } else if (!toggleEditorClass) {
+                                setToggleEditorClass(true)
+                            }
+                        }}
+                    >Открыть редактор текста</Button>
+                    <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}>
+                        <Editor id={params.id} getData={getData}/>
+                    </div>
+                </div>
+            }
             <h1>{pageData.title}</h1>
-            <p>{pageData.body}</p>
+            <div id="post-data"></div>
         </div>
     );
 };

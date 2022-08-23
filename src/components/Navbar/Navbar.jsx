@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../../context';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 
 const Navbar = ({page, setPage}) => {
@@ -30,7 +29,6 @@ const Navbar = ({page, setPage}) => {
     
     return (
         <div className="navbar">
-            <Stack spacing={2} direction="row">
             {
                 links.map(item =>
                     <Link
@@ -47,13 +45,12 @@ const Navbar = ({page, setPage}) => {
                             localStorage.setItem('page', JSON.stringify(item.id))
                         }}
                     >
-                        <Button variant={page == item.id ? "contained" : "outlined"} style={{padding: '5px 25px'}}>
+                        <Button variant={page == item.id ? "contained" : "outlined"} style={{padding: '5px 25px', margin: "0 10px"}}>
                             {item.name}
                         </Button>
                     </Link>
                 )
             }
-            </Stack>
         </div>
     );
 };
