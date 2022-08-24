@@ -11,9 +11,10 @@ body {
 }
 
 .App{
-  width: 1248px;
+  max-width: 1248px;
   margin: 0 auto;
 }
+
 
 /* header */
 header{
@@ -28,6 +29,9 @@ header{
   background-color: #fff;
   padding: 80px 100px;
   font-size: 16px;
+}
+.page-body * {
+  max-width: 1000px;
 }
 
 /* navbar */
@@ -128,6 +132,19 @@ header{
   margin-bottom: 20px;
 }
 
+/* npa */
+
+.ql-editor {
+  min-height: 50vh;
+  font-size: 16px;
+}
+
+.App .ql-snow .ql-tooltip.ql-flip {
+  width: 100%;
+  left: 17px!important;
+  white-space: normal;
+}
+
 /* search */
 
 .search__inputs{
@@ -191,6 +208,21 @@ fieldset{
   justify-content: space-between;
   align-items: center;
 }
+
+.search-response__wrapper{
+  display: flex;
+  flex-direction: column;
+  grid-gap: 30px;
+  flex-wrap: wrap;
+}
+
+.response__item {
+  padding: 15px;
+  border: 1px dashed black;
+  width: 100%;
+}
+
+/* carousel */
 
 .carousel__wrapper{
   display: flex;

@@ -20,13 +20,14 @@ function App() {
 
   useEffect(() => {
     const d = new Date();
-    if(JSON.stringify(d.getDate()) === localStorage.getItem("logindate")){
+    console.log(d);
+    if(JSON.stringify(d.getTime()) <= localStorage.getItem("loginExpiry")){
       setIsAuth(true);
       setPage(localStorage.getItem("page"));
       if(localStorage.getItem("isAdmin") !== undefined){
         setIsAdmin(true);
       }
-    } else if(JSON.stringify(d.getDate()) !== localStorage.getItem("logindate")){
+    } else if(JSON.stringify(d.getTime()) >= localStorage.getItem("loginExpiry")){
       setPage(7);
     }
     setIsLoading(false);

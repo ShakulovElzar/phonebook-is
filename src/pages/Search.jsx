@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import Button from "@mui/material/Button";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 const Search = () => {
 	const [queryWordsMatch, setQueryWordsMatch] = useState("allWords");
 	const [searchOrder, setSearchOrder] = useState("newest");
 	const [inputText, setInputText] = useState("");
-	const postData = {};
 	const searchScope = {
 		"categories": false,
 		"contacts": false,
@@ -13,8 +14,10 @@ const Search = () => {
 		"newsfeeds": false,
 		"tags": false
 	};
-	
+	const [responseData, setResponseData] = useState([]);
+
 	const search = () => {
+		const navigate = useNavigate;
 		for(let i = 0; i < 5; i++) {
 			const arr = ["categories", "contacts", "content", "newsfeeds", "tags"];
 			if(document.getElementById(`area-${arr[i]}`).checked){
@@ -23,11 +26,14 @@ const Search = () => {
 				searchScope[arr[i]] = false;
 			} 
 		}
-
-		postData.inputText = inputText;
-		postData.queryWordsMatch = queryWordsMatch;
-		postData.searchOrder = searchOrder;
-		postData.searchScope = searchScope
+		axios.get(`http://10.200.24.103:8089/account/?search=${inputText}`)
+			.then(response => {
+				console.log(response.data)
+			})
+		// postData.inputText = inputText;
+		// postData.queryWordsMatch = queryWordsMatch;
+		// postData.searchOrder = searchOrder;
+		// postData.searchScope = searchScope;
 	};
 
 	const changeQueryType = (value) => {
@@ -106,6 +112,14 @@ const Search = () => {
 			        Метки	
                 </label>
 			</fieldset>
+			<br/>
+			<br/>
+			<div className="search-response__wrapper">
+				<div className="response__item">
+					<h1>Header</h1>
+					<p>...It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum....</p>
+				</div>
+			</div>
         </div>
     );
 };

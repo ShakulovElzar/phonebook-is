@@ -5,6 +5,7 @@ import c from './pages.module.css'
 import {AdminContext, AuthContext} from '../context';
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import jwtDecode from "jwt-decode";
 
 
 const Login = (props) => {
@@ -57,8 +58,8 @@ const Login = (props) => {
         props.setPage(1);
         localStorage.setItem("page", JSON.stringify(1));
         if(rememberMe){
-            const d = new Date();
-            localStorage.setItem("logindate", d.getDate())
+            const decodedToken = jwtDecode(response.data.access);
+            localStorage.setItem("loginExpiry", JSON.stringify(decodedToken.exp))
         }
     };
 

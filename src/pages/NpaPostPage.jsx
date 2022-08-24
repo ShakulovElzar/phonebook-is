@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom';
 import axios from "axios";
 import {AdminContext} from "../context";
 import Button from "@mui/material/Button";
-import Editor from "../components/Editor/Add";
+import Editor from "../components/Editor/Editor";
 
 const NpaPostPage = () => {
     const {isAdmin} = useContext(AdminContext);
@@ -16,7 +16,6 @@ const NpaPostPage = () => {
                 Authorization: `Bearer ${localStorage.getItem("atoken")}`
             }
         }).then((t) => {
-            console.log(t.data);
             setPageData(t.data);
             if (t.data.categores[0] !== undefined) {
                 document.getElementById("post-data").innerHTML = JSON.stringify(t.data.categores[0].text)
@@ -37,15 +36,14 @@ const NpaPostPage = () => {
                         variant={toggleEditorClass ? "outlined" : "contained"}
                         onClick={() => {
                             if (toggleEditorClass) {
-                                setToggleEditorClass(false)
+                                setToggleEditorClass(false);
                             } else if (!toggleEditorClass) {
-                                setToggleEditorClass(true)
+                                setToggleEditorClass(true);
                             }
                         }}
+                        style={{marginLeft: "80%", width: 250}}
                     >Открыть редактор текста</Button>
-                    <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}>
-                        <Editor id={params.id} getData={getData}/>
-                    </div>
+                    <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}><Editor id={params.id} getData={getData}/></div>
                 </div>
             }
             <h1>{pageData.title}</h1>
