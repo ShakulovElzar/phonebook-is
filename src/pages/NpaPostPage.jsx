@@ -8,7 +8,9 @@ import Editor from "../components/Editor/Editor";
 const NpaPostPage = () => {
     const {isAdmin} = useContext(AdminContext);
     const params = useParams();
-    const [pageData, setPageData] = useState([]);
+    const [pageTitle, setTitle] = useState([]);
+    const [pageText, setPageText] = useState();
+    const [textId, setTextId] = useState();
 
     const getData = async () => {
         axios.get(`http://10.200.24.103:8089/npa/${params.id}`, {
@@ -16,9 +18,10 @@ const NpaPostPage = () => {
                 Authorization: `Bearer ${localStorage.getItem("atoken")}`
             }
         }).then((t) => {
-            setPageData(t.data);
+            setTitle(t.data.title);
             if (t.data.categores[0] !== undefined) {
-                document.getElementById("post-data").innerHTML = JSON.stringify(t.data.categores[0].text)
+                setPageText(t.data.categores[0].text);
+                setTextId(t.data.categores[0].id);
             }
         })
     };
@@ -43,11 +46,13 @@ const NpaPostPage = () => {
                         }}
                         style={{marginLeft: "80%", width: 250}}
                     >Открыть редактор текста</Button>
-                    <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}><Editor id={params.id} getData={getData}/></div>
+                    <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}>
+                        <Editor textId={textId} id={params.id} getData={getData}/>
+                    </div>
                 </div>
             }
-            <h1>{pageData.title}</h1>
-            <div id="post-data"></div>
+            <h1>{pageTitle}</h1>
+            <div dangerouslySetInnerHTML={{__html: pageText}}></div>
         </div>
     );
 };

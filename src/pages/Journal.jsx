@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import MTable from "../components/UI/MaterialTable/MTable";
 import axios from "axios";
 import {AdminContext} from "../context";
@@ -55,7 +55,7 @@ const Journal = () => {
         axios.get("http://10.200.24.103:8089/journal/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setStuff(t.data));
         axios.get('http://10.200.24.103:8089/account/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setUsers(t.data));
         axios.get('http://10.200.24.103:8089/jobtitle/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setJobtitles(t.data));
-    }
+    };
     // const getJobtitle = () => {
     //     let userID = fullname;
     //     for (let i = 0; i < users.length; i++) {
@@ -80,14 +80,14 @@ const Journal = () => {
             fullname,
             jobtitle,
             whom_asked: sendFullname
-        }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+        }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
         setTimeout(() => {
             getData()
         }, 2000)
     };
     const deleteUser = (event) => {
-        event.preventDefault()
-        axios.delete(`http://10.200.24.103:8089/journal/${deleteRef}/delete`, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+        event.preventDefault();
+        axios.delete(`http://10.200.24.103:8089/journal/${deleteRef}/delete`, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
         setTimeout(() => {
             getData()
         }, 1000)
@@ -99,13 +99,13 @@ const Journal = () => {
             fullname: updateFullname,
             jobtitle: updateJobtitle,
             whom_asked: NewSendFullname
-        }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+        }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
         setTimeout(() => {
             getData()
         }, 2000)
     };
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState();
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

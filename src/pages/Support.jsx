@@ -37,7 +37,7 @@ const Support = () => {
     const [reportText, setReportText] = useState("");
     const [reportDestination, setReportDestination] = useState(1);
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState();
     const [options, setOptions] = useState([]);
     const [workers, setWorkers] = useState([]);
     const [journalData, setJournalData] = useState([]);

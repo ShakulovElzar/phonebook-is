@@ -118,7 +118,7 @@ const Home = () => {
         }
     };
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -146,7 +146,13 @@ const Home = () => {
                                         <h3>Родительский департамент</h3>
                                         <FormControl>
                                             <InputLabel id="demo-simple-select-label">Родительский департамент</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => setParentDepartment(t.target.value)} label="Родительский департамент">
+                                            <Select sx={
+                                                {width: {
+                                                        lg: 350,
+                                                        md: 200,
+                                                        sm: 100
+                                                    }}
+                                            } md={{width: 350}} onChange={t => setParentDepartment(t.target.value)} label="Родительский департамент">
                                                 <MenuItem value={null}>Без родителя</MenuItem>
                                                 {
                                                     tableData.map((item, index) =>

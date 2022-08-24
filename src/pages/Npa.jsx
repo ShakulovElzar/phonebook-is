@@ -1,7 +1,5 @@
-import React, {useContext, useRef} from 'react';
-import { useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
-import { useEffect } from 'react';
 import MyTable from '../components/UI/MyTablet/MyTable';
 import {AdminContext} from "../context";
 import Box from "@mui/material/Box";
@@ -37,8 +35,8 @@ const Npa = () => {
     const {isSuperAdmin, isAdmin} = useContext(AdminContext);
     const [npaTitle, setNpaTitle] = useState("");
     const [wasSent, setWasSent] = useState(false);
-    const [targetedNpa, setTargetedNpa] = useState()
-    const [deletedNpa, setDeletedNpa] = useState()
+    const [targetedNpa, setTargetedNpa] = useState();
+    const [deletedNpa, setDeletedNpa] = useState();
 
     const [tableData, setTableData] = useState([]);
     const getData = async () => {
@@ -64,7 +62,7 @@ const Npa = () => {
         setWasSent(true);
         setTimeout(() => {
             setWasSent(false)
-        }, 3000)
+        }, 3000);
         setTimeout(() => getData(), 1000)
     };
     const deleteNpa = (event) => {
@@ -87,7 +85,7 @@ const Npa = () => {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("atoken")}`
                 }
-            })
+            });
         setTimeout(() => getData(), 1000)
     };
     const checkId =(id) => {
@@ -98,7 +96,7 @@ const Npa = () => {
         }
     };
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState();
 
     const handleChange = (event, newValue) => {
         setValue(newValue);

@@ -20,7 +20,6 @@ function App() {
 
   useEffect(() => {
     const d = new Date();
-    console.log(d);
     if(JSON.stringify(d.getTime()) <= localStorage.getItem("loginExpiry")){
       setIsAuth(true);
       setPage(localStorage.getItem("page"));
