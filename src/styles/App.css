@@ -3,6 +3,10 @@ a:visited { text-decoration: none; color: #777777;}
 a:hover { text-decoration: none; color: #777777;}
 a:active { text-decoration: none; color: #777777;}
 
+html {
+  overflow-y: scroll;
+}
+
 body {
   font-family: 'Open Sans', sans-serif;
   color: #333333;
@@ -231,7 +235,7 @@ fieldset{
   flex-direction: row;
   grid-gap: 20px;
   width: 100%;
-  height: 950px;
+  min-height: 950px;
   margin: 0;
 }
 
@@ -242,7 +246,7 @@ fieldset{
   border-radius: 10px;
 }
 
-.carousel__video{
+.carousel__content{
   width:  100%;
   height: 100%;
   border-radius: 10px;

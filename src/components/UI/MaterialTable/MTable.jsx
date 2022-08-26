@@ -46,7 +46,7 @@ const MTable = (props) => {
                                             ?
                                                 <></>
                                             :
-                                                <TableCell key={key} component="th" scope="row">
+                                                <TableCell key={index+1} component="th" scope="row">
                                                     {value}
                                                 </TableCell>
                                         }
@@ -57,7 +57,7 @@ const MTable = (props) => {
                             :
                             props.bodies.map((el, index) =>
                                 <TableRow key={index}>
-                                    {Object.entries(el).map(([key, value]) => <TableCell key={key}>
+                                    {Object.entries(el).map(([key, value]) => <TableCell key={index + 1}>
                                             {
                                                 index === 0
                                                     ?

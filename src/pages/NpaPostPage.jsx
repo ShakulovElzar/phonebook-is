@@ -47,7 +47,7 @@ const NpaPostPage = () => {
                         style={{marginLeft: "80%", width: 250}}
                     >Открыть редактор текста</Button>
                     <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}>
-                        <Editor textId={textId} id={params.id} getData={getData}/>
+                        <Editor textId={textId} id={params.id} getData={getData} page="npa"/>
                     </div>
                 </div>
             }

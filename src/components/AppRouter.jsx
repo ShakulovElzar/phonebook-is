@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, Navigate } from "react-router-dom";
+import React, {useContext} from 'react';
+import {Navigate, Route, Routes} from "react-router-dom";
 import Home from '../pages/Home';
 import Profcom from '../pages/Profcom';
 import Npa from '../pages/Npa';
@@ -10,9 +10,8 @@ import Support from '../pages/Support';
 import DepartmentPostPage from '../pages/DepartmentPostPage';
 import Register from '../pages/login pages/Register';
 import NpaPostPage from '../pages/NpaPostPage';
-import { useContext } from 'react';
 import MyLoader from "./UI/MyLoader/MyLoader";
-import { AuthContext } from '../context';
+import {AuthContext} from '../context';
 import ProfcomPostPage from "../pages/ProfcomPostPage";
 
 const AppRouter = (props) => {
@@ -40,7 +39,7 @@ const AppRouter = (props) => {
                     </Routes>
                     :
                     <Routes>    
-                        <Route exact path="/login" element={<Login setPage={props.setPage}/>} key="7" />
+                        <Route exact path="/login" element={<Login setPage={props.setPage} isAdminCheck={props.isAdminCheck}/>} key="7" />
                         <Route exact path='/login/register' element={<Register />} key="73"/>
                         <Route path="*" element={<Navigate to="/login" />}/>
                     </Routes>

@@ -11,6 +11,10 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
+import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
+import dayjs from 'dayjs';
 
 function TabPanel(props) {
     const { children, value, index } = props;
@@ -44,6 +48,9 @@ const Journal = () => {
     const [sendFullname, setSendFullname] = useState(1);
     const [NewSendFullname, setNewSendFullname] = useState(1);
     const [stuff, setStuff] = useState([]);
+    var now = dayjs();
+    console.log(now);
+    const [dateValue, setDateValue] = useState(now);
 
     const [headers] = useState([
         "По причине",
@@ -165,6 +172,20 @@ const Journal = () => {
                                                 }
                                             </Select>
                                         </FormControl>
+
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                            <DesktopDatePicker
+                                                label="Выбрать дату"
+                                                inputFormat="dd/mm/yyyy"
+                                                value={dateValue}
+                                                onChange={t => {
+                                                    console.log(t);
+                                                    setDateValue(t.target.value)
+                                                }}
+                                                renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>
+
                                         <Button type="submit" variant="contained" size="large" style={{marginLeft: 15, marginTop: 5}}>Добавить</Button>
                                     </form>
                                 </div>

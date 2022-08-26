@@ -1,5 +1,4 @@
-import React, {useEffect} from 'react';
-import { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import TextField from "@mui/material/TextField/TextField";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
@@ -223,44 +222,3 @@ const Register = () => {
 };
 
 export default Register;
-
-{/*<div className="register-input">*/}
-{/*    <label className="invalid" title="<strong>Имя</strong><br />Введите ваше полное имя">*/}
-{/*        Подтверждение адреса электронной почты<span className="star">&nbsp;*</span>*/}
-{/*        {*/}
-{/*            exactEmailCheck &&*/}
-{/*                <span style={{color: "red", fontSize: 12, paddingLeft: 5}}>Почты не совпадают</span>*/}
-{/*        }*/}
-{/*    </label>*/}
-{/*    <input required type="text" onChange={(i) => {*/}
-{/*        setEmailConfirm(i.target.value)*/}
-{/*        if(i.target.value === email){*/}
-{/*            setExactEmailCheck(false)*/}
-{/*        } if(i.target.value !== email){*/}
-{/*            setExactEmailCheck(true)*/}
-{/*        }*/}
-{/*    }} value={emailConfirm} className="register__input"></input>*/}
-{/*</div>*/}
-{/*<div className="register-input">*/}
-{/*    <label className="invalid" title="<strong>Имя</strong><br />Введите ваше полное имя">*/}
-{/*        Пароль<span className="star">&nbsp;*</span>*/}
-{/*    </label>*/}
-{/*    <input required type="password" onChange={(i) => setPassword(i.target.value)} value={password} className="register__input"></input>*/}
-{/*</div>*/}
-{/*<div className="register-input">*/}
-{/*    <label className="invalid" title="<strong>Имя</strong><br />Введите ваше полное имя">*/}
-{/*        Повтор пароля<span className="star">&nbsp;*</span>*/}
-{/*        {*/}
-{/*            exactPasswordCheck &&*/}
-{/*                <span style={{color: "red", fontSize: 12, paddingLeft: 5}}>Пароли не совпадают</span>*/}
-{/*        }*/}
-{/*    </label>*/}
-{/*    <input required type="password" onChange={(i) => {*/}
-{/*        setPasswordConfirm(i.target.value)*/}
-{/*        if(i.target.value === password){*/}
-{/*            setExactPasswordCheck(false)*/}
-{/*        } if(i.target.value !== password){*/}
-{/*            setExactPasswordCheck(true)*/}
-{/*        }*/}
-{/*    }} value={passwordConfirm} className="register__input"></input>*/}
-{/*</div>*/}

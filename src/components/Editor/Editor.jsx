@@ -14,7 +14,7 @@ function Editor(props) {
         setUserText(e);
     };
     useEffect(() => {
-        axios.get(`http://10.200.24.103:8089/npa/${props.id}/`)
+        axios.get(`http://10.200.24.103:8089/${props.page}/${props.id}/`)
             .then(resp => {
                 if(resp.data.categores.length !== 0){
                     setUserText(resp.data.categores[0].text);
@@ -35,7 +35,7 @@ function Editor(props) {
                 if (userText === "") {
                     setUserText("")
                 }
-                axios.patch(`http://10.200.24.103:8089/npainfo/news/update/${props.textId}/`,{
+                axios.patch(`http://10.200.24.103:8089/${props.page}info/news/update/${props.textId}/`,{
                     text: userText,
                     category: props.id
                 }, {
@@ -45,7 +45,7 @@ function Editor(props) {
                 }).then(t => console.log(t));
                 return;
             }
-            axios.post("http://10.200.24.103:8089/npainfo/news/create/", {
+            axios.post(`http://10.200.24.103:8089/${props.page}info/news/create/`, {
                 text: userText,
                 category: props.id
             }, {

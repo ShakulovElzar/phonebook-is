@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
-import {AuthContext} from '../../context';
+import {AdminContext, AuthContext} from '../../context';
 import Button from '@mui/material/Button';
 
 const Navbar = ({page, setPage}) => {
     const {isAuth, setIsAuth} = useContext(AuthContext);
+    const {setIsAdmin} = useContext(AdminContext);
     const [logName, setLogName] = useState("Войти");
 
     const links = [
@@ -38,8 +39,8 @@ const Navbar = ({page, setPage}) => {
                             if(!isAuth) return;
                             if(item.id === 7){
                                 setIsAuth(false);
-                                localStorage.removeItem("logindate");
-                                localStorage.removeItem("isAdmin");
+                                setIsAdmin(false);
+                                localStorage.clear();
                             }
                             setPage(item.id);
                             localStorage.setItem('page', JSON.stringify(item.id))

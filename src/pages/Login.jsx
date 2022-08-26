@@ -9,12 +9,11 @@ import jwtDecode from "jwt-decode";
 
 
 const Login = (props) => {
+    const {setIsAdmin} = useContext(AdminContext);
     let {setIsAuth} = useContext(AuthContext);
-    let {setIsAdmin} = useContext(AdminContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 	const [rememberMe, setRememberMe] = useState(false);
-
     const [emailDirty, setEmailDirty] = useState(false);
     const [emailError, setEmailError] = useState('Поле электронной почты не может быть пустым');
     const [passwordError, setPasswordError] = useState("");
@@ -38,25 +37,13 @@ const Login = (props) => {
             }
 		});
         if (response === undefined) return;
-        axios.get('http://10.200.24.103:8089/account/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
-            .then(t => {
-                for (let i = 0; i < t.data.length; i++) {
-                    if(t.data[i].email === response.data.email){
-                        if(t.data[i].is_staff){
-                            setIsAdmin(t.data[i].is_staff);
-                            localStorage.setItem("isAdmin", true);
-                        }
-                    }
-                }
-            });
-
         localStorage.setItem("atoken", response.data.access);
         localStorage.setItem("rtoken", response.data.refresh);
         localStorage.setItem("user", response.data.email);
-
-        setIsAuth(true);
+        localStorage.setItem("page", "1");
         props.setPage(1);
-        localStorage.setItem("page", JSON.stringify(1));
+        props.isAdminCheck();
+        setIsAuth(true);
         if(rememberMe){
             const decodedToken = jwtDecode(response.data.access);
             localStorage.setItem("loginExpiry", JSON.stringify(decodedToken.exp))
