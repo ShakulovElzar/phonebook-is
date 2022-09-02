@@ -7,17 +7,26 @@ import Button from "@mui/material/Button";
 import EditorToolbar, {formats, modules} from "./EditorToolbar";
 
 
-function Editor(props) {
+function Editor({getData, page, id, setToggleEditorClass, textId}) {
     const [userText, setUserText] = useState("");
     const [hasText, setHasText] = useState(false);
+    const [emailID, setEmailID] = useState();
+
     const onDescription = (e) => {
         setUserText(e);
     };
     useEffect(() => {
-        axios.get(`http://10.200.24.103:8089/${props.page}/${props.id}/`)
+        axios.get(`http://10.200.24.103:8089/${page}/${id}/`)
             .then(resp => {
-                if(resp.data.categores.length !== 0){
-                    setUserText(resp.data.categores[0].text);
+                if (page === "npa") {
+                    if (resp.data.categores.length !== 0) {
+                        setUserText(resp.data.categores[0].text);
+                        setHasText(true);
+                    }
+                }
+                if (page === "profcom") {
+
+                    setUserText(resp.data.text);
                     setHasText(true);
                 }
             });
@@ -27,36 +36,51 @@ function Editor(props) {
     const addDetails = async (event) => {
         try {
             event.persist();
-            if (userText < 50) {
-                setError('Required, Add description minimum length 50 characters');
-                return;
-            }
-            if (hasText){
-                if (userText === "") {
-                    setUserText("")
+            if (page === "npa") {
+                if(!hasText){
+                    axios.post(`http://10.200.24.103:8089/${page}info/news/create/`, {
+                        text: userText,
+                        category: id
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("atoken")}`
+                        }
+                    }).then(res => {
+                        if (res.data.success === 200) {
+                            setTimeout(() => getData(), 500)
+                        }
+                    });
                 }
-                axios.patch(`http://10.200.24.103:8089/${props.page}info/news/update/${props.textId}/`,{
+                if (hasText){
+                    axios.patch(`http://10.200.24.103:8089/${page}info/news/update/${textId}/`, {
+                        text: userText,
+                        category: id
+                    }, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("atoken")}`
+                        }
+                    })
+                }
+             }
+            if (page === "profcom") {
+                axios.get(`http://10.200.24.103:8089/account/?search=${localStorage.getItem("user")}`)
+                    .then(res => {
+                        setEmailID(res.data[0].id);
+                    });
+                axios.patch(`http://10.200.24.103:8089/${page}/update/${id}/`, {
                     text: userText,
-                    category: props.id
+                    author: emailID
                 }, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("atoken")}`
                     }
-                }).then(t => console.log(t));
-                return;
+                }).then(res => {
+                    if (res.data.success === true) {
+                        setTimeout(() => getData(), 500)
+                    }
+                });
             }
-            axios.post(`http://10.200.24.103:8089/${props.page}info/news/create/`, {
-                text: userText,
-                category: props.id
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("atoken")}`
-                }
-            }).then(res => {
-                if (res.data.success === true) {
-                    setTimeout(() => props.getData(), 500)
-                }
-            });
+            setToggleEditorClass(false)
         } catch (error) {
             throw error;
         }

@@ -150,6 +150,11 @@ header{
   white-space: normal;
 }
 
+.npa-post__page > p > img {
+  max-width: 450px;
+  max-height: 350px;
+}
+
 /* search */
 
 .search__inputs{
@@ -229,21 +234,28 @@ fieldset{
 
 /* carousel */
 
+.page-body > .carousel {
+  height: 900px;
+}
+
 .carousel__wrapper{
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  grid-gap: 20px;
-  width: 100%;
-  min-height: 950px;
-  margin: 0;
+  display: grid;
+  gap: 15px;
+  width: 95%;
+  padding-left: 25px;
+  min-height: 800px;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr 1fr 1fr;
 }
 
 .carousel__item{
-  box-shadow: 0 0 10px #ccc;
-  width: 514px;
-  height: 300px;
+  box-shadow: 0 0 5px #ccc;
+  width: 450px;
+  height: 250px;
   border-radius: 10px;
+  margin: 0;
+  position: relative;
 }
 
 .carousel__content{
@@ -255,6 +267,13 @@ fieldset{
 .carousel__text{
   text-align: center;
   margin-top: 150px;
+}
+
+.delete__button{
+  position: absolute;
+  right: 0;
+  color: lightgray;
+  top: 0;
 }
 
 .search__ordering__label{
@@ -303,8 +322,6 @@ fieldset{
     background: white;
     cursor: pointer;
 }
-
-
 
 /* adaptivity */
 

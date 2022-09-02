@@ -7,6 +7,7 @@ import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell, {tableCellClasses} from '@mui/material/TableCell';
 import Paper from '@mui/material/Paper';
+import moment from "moment";
 
 const MTable = (props) => {
     const theme = createTheme({
@@ -44,10 +45,16 @@ const MTable = (props) => {
                                         {
                                             (key === "id" || key === "category")
                                             ?
-                                                <></>
+                                                <React.Fragment key={key}></React.Fragment>
                                             :
                                                 <TableCell key={index+1} component="th" scope="row">
-                                                    {value}
+                                                    {
+                                                        key === "date"
+                                                            ?
+                                                            moment(value).utcOffset(0, false).format("DD/MM/YYYY")
+                                                            :
+                                                            value
+                                                    }
                                                 </TableCell>
                                         }
                                         </>

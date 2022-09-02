@@ -39,44 +39,65 @@ const Journal = () => {
     const {isAdmin, isSuperAdmin} = useContext(AdminContext);
     const [users, setUsers] = useState([]);
     const [reasonText, setReasonText] = useState("");
+    const [newReasonText, setNewReasonText] = useState("");
     const [jobtitles, setJobtitles] = useState([]);
-    const [fullname, setFullname] = useState("");
-    const [updateFullname, setUpdateFullname] = useState(1);
-    const [jobtitle, setJobtitle] = useState(1);
-    const [updateJobtitle, setUpdateJobtitle] = useState(1);
+    const [fullnameId, setFullnameId] = useState("");
+    const [updateFullnameId, setUpdateFullnameId] = useState(-1);
+    const [newWhomAskedId, setNewWhomAskedId] = useState(-1);
+    const [whomAskedId, setWhomAskedId] = useState(-1);
+
+    const [jobtitle, setJobtitle] = useState();
     const [deleteRef, setDeleteRef] = useState(1);
-    const [sendFullname, setSendFullname] = useState(1);
-    const [NewSendFullname, setNewSendFullname] = useState(1);
+    const [postID, setPostID] = useState();
     const [stuff, setStuff] = useState([]);
-    var now = dayjs();
-    console.log(now);
-    const [dateValue, setDateValue] = useState(now);
+    let today = dayjs();
+    const [dateValue, setDateValue] = useState(today);
 
     const [headers] = useState([
-        "По причине",
         "ФИО",
         "Должность",
         "Отпросился у",
+        "По причине",
+        "Дата"
     ]);
     const getData = async () => {
-        axios.get("http://10.200.24.103:8089/journal/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setStuff(t.data));
-        axios.get('http://10.200.24.103:8089/account/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setUsers(t.data));
-        axios.get('http://10.200.24.103:8089/jobtitle/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}}).then((t) => setJobtitles(t.data));
+        axios.get("http://10.200.24.103:8089/journal/", {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+            .then((t) => setStuff(t.data));
+        axios.get('http://10.200.24.103:8089/account/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+            .then((t) => {
+                setUsers(t.data);
+            });
+        axios.get('http://10.200.24.103:8089/jobtitle/', {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+            .then((t) => setJobtitles(t.data));
     };
-    // const getJobtitle = () => {
-    //     let userID = fullname;
-    //     for (let i = 0; i < users.length; i++) {
-    //         if(users[i].id === userID){
-    //             for (let j = 0; j < jobtitles.length; j++) {
-    //                 console.log(jobtitles[j].jobtitle, users[i])
-    //                 if(jobtitles[j].jobtitle === users[i].jobtitle){
-    //                     setJobtitle(jobtitles[j].id)
-    //                 }
-    //
-    //             }
-    //         }
-    //     }
-    // };
+    const getJobtitle = (id) => {
+        let userID = id;
+        for (let i = 0; i < users.length; i++) {
+            if(users[i].id === userID){
+                for (let j = 0; j < jobtitles.length; j++) {
+                    if(jobtitles[j].jobtitle === users[i].jobtitle){
+                        setJobtitle(jobtitles[j].id)
+                    }
+                }
+            }
+        }
+    };
+    const getIdWithFullname = (name) => {
+        let userText = name;
+        for (let i = 0; i < users.length; i++) {
+            if(users[i].fullname === userText){
+                setUpdateFullnameId(users[i].id);
+            }
+        }
+    };
+    const getIdWithWhomAsked = (name) => {
+        let userText = name;
+        for (let i = 0; i < users.length; i++) {
+            if(users[i].fullname === userText){
+                setNewWhomAskedId(users[i].id);
+            }
+        }
+    };
     useEffect(() => {
         getData()
     }, []);
@@ -84,9 +105,10 @@ const Journal = () => {
         event.preventDefault();
         axios.post("http://10.200.24.103:8089/journal/create/",{
             reason: reasonText,
-            fullname,
+            fullname: fullnameId,
             jobtitle,
-            whom_asked: sendFullname
+            whom_asked: whomAskedId,
+            date: dateValue
         }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
         setTimeout(() => {
             getData()
@@ -101,15 +123,27 @@ const Journal = () => {
     };
     const updateUser = (event) => {
         event.preventDefault();
-        axios.patch(`http://10.200.24.103:8089/journal/${updateFullname}/update/`,{
-            reason: reasonText,
-            fullname: updateFullname,
-            jobtitle: updateJobtitle,
-            whom_asked: NewSendFullname
+        axios.patch(`http://10.200.24.103:8089/journal/${postID}/update/`,{
+            reason: newReasonText,
+            fullname: updateFullnameId,
+            jobtitle: jobtitle,
+            whom_asked: newWhomAskedId,
+            date: dateValue
         }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
         setTimeout(() => {
             getData()
         }, 2000)
+    };
+    const handlePostIdChange = (id) => {
+        setPostID(id);
+        axios.get(`http://10.200.24.103:8089/journal/${id}/`, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}})
+            .then(resp => {
+                getIdWithFullname(resp.data.fullname);
+                getJobtitle(resp.data.jobtitle);
+                getIdWithWhomAsked(resp.data.whom_asked);
+                setDateValue(resp.data.date);
+                setNewReasonText(resp.data.reason);
+            })
     };
 
     const [value, setValue] = React.useState();
@@ -136,57 +170,56 @@ const Journal = () => {
                                     <h2>Добавить</h2>
                                     <form onSubmit={addUser}>
                                         <TextField fullWidth required label="Причина" variant="outlined" value={reasonText} onChange={(i) => setReasonText(i.target.value)}/>
-                                        <h3>Выберите человека</h3>
-                                        <FormControl>
-                                            <InputLabel>Выбрать человека</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => {
-                                                setFullname(t.target.value);
-                                                // getJobtitle();
-                                            }} label="Выбрать человека">
-                                                {
-                                                    users.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        <h3>Выберите должность человека</h3>
-                                        <FormControl>
-                                            <InputLabel>Выбрать должность</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => setJobtitle(t.target.value)} label="Выбрать должность">
-                                                {
-                                                    jobtitles.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.jobtitle}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        <h3>Выберите человека, у которого он отпросился</h3>
-                                        <FormControl>
-                                            <InputLabel>Выбрать человека</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => setSendFullname(t.target.value)} label="Выбрать человека">
-                                                {
-                                                    users.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                        </FormControl>
-
-                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                            <DesktopDatePicker
-                                                label="Выбрать дату"
-                                                inputFormat="dd/mm/yyyy"
-                                                value={dateValue}
-                                                onChange={t => {
-                                                    console.log(t);
-                                                    setDateValue(t.target.value)
-                                                }}
-                                                renderInput={(params) => <TextField {...params} />}
-                                            />
-                                        </LocalizationProvider>
-
-                                        <Button type="submit" variant="contained" size="large" style={{marginLeft: 15, marginTop: 5}}>Добавить</Button>
+                                        <div style={{display: 'flex', flexDirection: 'row', gridGap: 175}}>
+                                            <div>
+                                                <h3>Выберите человека</h3>
+                                                <FormControl>
+                                                    <InputLabel>Выбрать человека</InputLabel>
+                                                    <Select sx={{width: 350}} onChange={t => {
+                                                        setFullnameId(t.target.value);
+                                                        getJobtitle(t.target.value);
+                                                    }} label="Выбрать человека">
+                                                        {
+                                                            users.map((item, index) =>
+                                                                <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
+                                                            )
+                                                        }
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
+                                        </div>
+                                        <div style={{display: 'flex', flexDirection: 'row', gridGap: 100}}>
+                                            <div>
+                                                <h3>Выберите человека, у которого он отпросился</h3>
+                                                <FormControl>
+                                                    <InputLabel>Выбрать человека</InputLabel>
+                                                    <Select sx={{width: 350}} onChange={t => setWhomAskedId(t.target.value)} label="Выбрать человека">
+                                                        {
+                                                            users.map((item, index) =>
+                                                                <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
+                                                            )
+                                                        }
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
+                                            <div>
+                                                <h3>Выберите дату</h3>
+                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                    <DesktopDatePicker
+                                                        label="Выбрать дату"
+                                                        inputFormat="dd/MM/yyyy"
+                                                        value={dateValue}
+                                                        onChange={t => {
+                                                            setDateValue(t)
+                                                        }}
+                                                        minDate={today}
+                                                        maxDate={today.add(2, 'day')}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+                                            </div>
+                                        </div>
+                                        <Button type="submit" variant="contained" size="large" style={{ marginTop: 15 }}>Добавить</Button>
                                     </form>
                                 </div>
                             </TabPanel>
@@ -200,7 +233,7 @@ const Journal = () => {
                                             <Select sx={{width: 350}} onChange={t => setDeleteRef(t.target.value)} label="Выбрать пост">
                                                 {
                                                     stuff.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
+                                                        <MenuItem key={index} value={item.id}>{item.fullname}: {item.reason}</MenuItem>
                                                     )
                                                 }
                                             </Select>
@@ -213,41 +246,70 @@ const Journal = () => {
                                 <div className="admin-form__wrapper">
                                     <h2>Изменить пост</h2>
                                     <form onSubmit={updateUser}>
-                                        <TextField fullWidth required label="Новая причина" variant="outlined" value={reasonText} onChange={(i) => setReasonText(i.target.value)}/>
-                                        <h3>Выберите человека</h3>
-                                        <FormControl>
-                                            <InputLabel>Выбрать человека</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => setUpdateFullname(t.target.value)} label="Выбрать НПА">
-                                                {
-                                                    stuff.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        <h3>Выберите должность человека</h3>
-                                        <FormControl>
-                                            <InputLabel>Выбрать должность</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => setUpdateJobtitle(t.target.value)} label="Выбрать должность">
-                                                {
-                                                    jobtitles.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.jobtitle}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        <h3>Выберите человека, у которого он отпросился</h3>
-                                        <FormControl>
-                                            <InputLabel>Выбрать должность</InputLabel>
-                                            <Select sx={{width: 350}} onChange={t => setNewSendFullname(t.target.value)} label="Выбрать должность">
-                                                {
-                                                    users.map((item, index) =>
-                                                        <MenuItem key={index} value={item.id}>{item.email}</MenuItem>
-                                                    )
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        <Button type="submit" variant="contained" size="large" style={{marginLeft: 15, marginTop: 5}}>Изменить</Button>
+                                        <TextField fullWidth  label="Новая причина" variant="outlined" value={newReasonText} onChange={(i) => setNewReasonText(i.target.value)}/>
+                                        <div>
+                                            <h3>Выберите пост</h3>
+                                            <FormControl>
+                                                <InputLabel>Выбрать пост</InputLabel>
+                                                <Select sx={{width: 350}} onChange={t => handlePostIdChange(t.target.value)} label="Выбрать пост">
+                                                    {
+                                                        stuff.map((item, index) =>
+                                                            <MenuItem key={index} value={item.id}>{item.fullname}: {item.reason}</MenuItem>
+                                                        )
+                                                    }
+                                                </Select>
+                                            </FormControl>
+                                        </div>
+                                        <div style={{display: 'flex', flexDirection: 'row', gridGap: "20%"}}>
+                                            <div>
+                                                <h3>Выберите человека</h3>
+                                                <FormControl>
+                                                    <InputLabel>Выбрать человека</InputLabel>
+                                                    <Select sx={{width: 350}} value={updateFullnameId} onChange={t => {
+                                                        setUpdateFullnameId(t.target.value);
+                                                        getJobtitle(t.target.value);
+                                                    }} label="Выбрать НПА">
+                                                        {
+                                                            users.map((item, index) =>
+                                                                <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
+                                                            )
+                                                        }
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
+                                        </div>
+                                        <div style={{display: 'flex', flexDirection: 'row', gridGap: "13%"}}>
+                                            <div>
+                                                <h3>Выберите человека, у которого он отпросился</h3>
+                                                <FormControl>
+                                                    <InputLabel>Выбрать человека</InputLabel>
+                                                    <Select value={newWhomAskedId} sx={{width: 350}} onChange={t => setNewWhomAskedId(t.target.value)} label="Выбрать человека">
+                                                        {
+                                                            users.map((item, index) =>
+                                                                <MenuItem key={index} value={item.id}>{item.email}</MenuItem>
+                                                            )
+                                                        }
+                                                    </Select>
+                                                </FormControl>
+                                            </div>
+                                            <div>
+                                                <h3>Выберите дату</h3>
+                                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                    <DesktopDatePicker
+                                                        label="Выбрать дату"
+                                                        inputFormat="dd/MM/yyyy"
+                                                        value={dateValue}
+                                                        onChange={t => {
+                                                            setDateValue(t)
+                                                        }}
+                                                        minDate={today}
+                                                        maxDate={today.add(2, 'day')}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
+                                                </LocalizationProvider>
+                                            </div>
+                                        </div>
+                                        <Button type="submit" variant="contained" size="large" style={{marginTop: 15}}>Изменить</Button>
                                     </form>
                                 </div>
                             </TabPanel>

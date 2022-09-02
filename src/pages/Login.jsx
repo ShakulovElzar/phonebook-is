@@ -40,6 +40,7 @@ const Login = (props) => {
         localStorage.setItem("atoken", response.data.access);
         localStorage.setItem("rtoken", response.data.refresh);
         localStorage.setItem("user", response.data.email);
+        // localStorage.setItem("id", response.data.id);
         localStorage.setItem("page", "1");
         props.setPage(1);
         props.isAdminCheck();

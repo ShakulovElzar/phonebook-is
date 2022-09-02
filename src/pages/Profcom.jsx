@@ -3,103 +3,89 @@ import Carousel from 'react-material-ui-carousel'
 import {useNavigate} from "react-router-dom";
 import {AdminContext} from "../context";
 import axios from "axios";
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import TextField from "@mui/material/TextField/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel/InputLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import MyLoader from "../components/UI/MyLoader/MyLoader";
+import createTheme from "@mui/material/styles/createTheme";
+import Resizer from "react-image-file-resizer";
 
-const testLinks = [
-    "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-    "https://ak.picdn.net/shutterstock/videos/1090804479/preview/stock-footage-security-camera-surveillance-footage-face-scanning-of-crowd-of-people-walking-on-busy-station-big.webm",
-    "https://ak.picdn.net/shutterstock/videos/1059056354/preview/stock-footage-hud-technological-futuristic-intro-scifi-data-user-interface-digital-infographic-elements-d.webm"
-];
+function TabPanel(props) {
+    const {children, value, index} = props;
 
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+        >
+            {value === index && (
+                <Box sx={{paddingTop: 1}}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
 
 const Profcom = () => {
     const {isAdmin} = useContext(AdminContext);
     const [postsData, setPostsData] = useState([]);
-    const items = [
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "1"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "2"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "3"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "4"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "5"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "6"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "7"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "8"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "9"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "10"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "11"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "12"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "13"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "14"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "15"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "16"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "17"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "18"
-        },
-        {
-            "content": "https://ak.picdn.net/shutterstock/videos/1057977454/preview/stock-footage-white-curtain-blowing-by-wind-in-room-outside-is-coconut-tree-swaying-by-wind-fresh-and-deep.webm",
-            "text": "19"
-        },
-    ];
+    const [postName, setPostName] = useState("");
+    const [newPostName, setNewPostName] = useState("");
+    const [updatedPost, setUpdatedPost] = useState();
+    const [photo, setPhoto] = useState();
+    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
+    const [emailID, setEmailID] = useState();
+    axios.get(`http://10.200.24.103:8089/account/?search=${localStorage.getItem("user")}`)
+        .then(res => {
+            setEmailID(res.data[0].id);
+        });
+
+    const getData = () => {
         axios.get('http://10.200.24.103:8089/profcom/')
             .then(resp => {
                 setPostsData(resp.data);
-            })
+            }).then(() => setIsLoading(false));
+    };
+    useEffect(() => {
+        getData();
     }, []);
+    async function resizeFile (event) {
+        var fileInput = false;
+        if (event.target.files[0]) {
+            fileInput = true;
+        }
+        if (fileInput) {
+            try {
+                Resizer.imageFileResizer(
+                    event.target.files[0],
+                    500,
+                    500,
+                    "JPEG",
+                    50,
+                    0,
+                    (uri) => {
+                        setPhoto(uri);
+                    },
+                    "base64"
+                );
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        return photo;
+    }
 
+    // count pages
     let numberOfPages = Math.ceil(postsData.length / 6);
     let NOPArr = [];
     for (let i = 1; i <= numberOfPages; i++) {
@@ -112,75 +98,233 @@ const Profcom = () => {
         }
     }
 
+    const addPost = (event) => {
+        event.preventDefault();
+        axios.post("http://10.200.24.103:8089/profcom/create/", {
+            image: photo,
+            text: "",
+            author: emailID
+        }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
+        setTimeout(() => {
+            getData();
+        }, 1000)
+    };
+    const deletePost = (id) => {
+        setIsLoading(true);
+        axios.delete(`http://10.200.24.103:8089/profcom/delete/${id}/`, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
+        setTimeout(() => {
+            getData();
+        }, 500);
+        setIsLoading(false);
+    };
+    const updatePost = (event) => {
+        event.preventDefault();
+        axios.patch(`http://10.200.24.103:8089/profcom/update/${updatedPost}/`, {
+            image: photo,
+            author: emailID
+        }, {headers: {"Authorization": `Bearer ${localStorage.getItem("atoken")}`}});
+        setTimeout(() => {
+            getData();
+        }, 500)
+    };
+
+    const [value, setValue] = React.useState();
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     return (
         <div className="page-body">
 
             {
                 isAdmin &&
                 <>
-                    <h1>hello</h1>
+                    <Box sx={{width: '100%'}}>
+                        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                            <Tabs value={value} onChange={handleChange}>
+                                <Tab label="Добавить"/>
+                                <Tab label="Удалить"/>
+                                <Tab label="Обновить"/>
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={value} index={0}>
+                            <div className='admin-form__wrapper'>
+                                <h2>Добавьте обложку нового поста</h2>
+                                <form onSubmit={addPost}>
+                                    <div>
+                                        <h2>
+                                            Фото
+                                        </h2>
+                                        <input
+                                            required
+                                            id="raised-button-file"
+                                            onChange={resizeFile}
+                                            type="file"
+                                            style={{display: 'none'}}
+                                            accept=".jpg, .jpeg, .png"
+                                        />
+                                        <label htmlFor="raised-button-file">
+                                            <Button variant="contained" component="span">
+                                                Опубликовать
+                                            </Button>
+                                        </label>
+                                    </div>
+                                    <Button type="submit" variant="contained" size="large"
+                                            style={{marginTop: 15}}>Добавить</Button>
+                                </form>
+                            </div>
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <div className='admin-form__wrapper'>
+                                <h2>Выберите пост для удаления пост</h2>
+                            </div>
+                        </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <div className='admin-form__wrapper'>
+                                <h2>Изменить пост</h2>
+                                <form onSubmit={updatePost}>
+                                    <TextField fullWidth
+                                               label="Новое название поста"
+                                               variant="outlined"
+                                               value={newPostName}
+                                               onChange={(i) => setNewPostName(i.target.value)}
+                                    />
+                                    <h3>Выберите пост</h3>
+                                    <FormControl>
+                                        <InputLabel id="demo-simple-select-label">Выбрать пост</InputLabel>
+                                        <Select sx={{width: 350}} onChange={t => setUpdatedPost(t.target.value)}
+                                                label="Выбрать пост">
+                                            {
+                                                postsData.map((item, index) =>
+                                                    <MenuItem key={index}
+                                                              value={item.id}>...{item.text.slice(0, 10)}...</MenuItem>
+                                                )
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                    <div>
+                                        <h2>
+                                            Фото
+                                        </h2>
+                                        <input
+                                            required
+                                            id="raised-button-file"
+                                            onChange={resizeFile}
+                                            type="file"
+                                            style={{display: 'none'}}
+                                            accept=".jpg, .jpeg, .png"
+                                        />
+                                        <label htmlFor="raised-button-file">
+                                            <Button variant="contained" component="span">
+                                                Опубликовать
+                                            </Button>
+                                        </label>
+                                    </div>
+                                    <Button type="submit" variant="contained" size="large"
+                                            style={{marginTop: 15}}>Изменить</Button>
+                                </form>
+                            </div>
+                        </TabPanel>
+                    </Box>
                 </>
             }
+            <br/>
+            <br/>
+            {
+                isLoading ?
+                    <div style={{display: "flex", justifyContent: "center"}}>
+                        <MyLoader/>
+                    </div>
+                    :
+                    <Carousel
+                        swipe={true}
+                        autoPlay={false}
+                        navButtonsAlwaysVisible={true}
+                        className='carousel'
+                    >
 
-            <Carousel
-                swipe={true}
-                autoPlay={false}
-                navButtonsAlwaysVisible={true}
+                        {
+                            NOPArr.map((item, index) => <div className='carousel__wrapper' key={index}>
+                                    {
+                                        postsData.slice((index * 6), (index * 6 + 6)).map((item, index) =>
+                                            <CarouselItem
+                                                key={index}
+                                                id={item.id}
+                                                image={item.image}
+                                                value={value}
+                                                    deletePost={deletePost}
+                                            />
+                                        )
+                                    }
+                                    {
+                                        addingIndex.length !== 0 ?
+                                            <>
+                                                {
+                                                    addingIndex.map((item, index) =>
+                                                        <CarouselItem
+                                                            key={index}
+                                                            disabled={true}
+                                                            image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOIAAAB/CAMAAADFNu54AAAAA1BMVEWpqamhHEfZAAAAM0lEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBrA3CdAAE3EswrAAAAAElFTkSuQmCC'/>
+                                                    )
 
-            >
-
-                {
-                    NOPArr.map((item, index) => <div className='carousel__wrapper' key={index}>
-                            {
-                                postsData.slice((index * 6), (index * 6 + 6)).map((item, index) =>
-                                    <CarouselItem key={index} id={index} image={item.image}/>
-                                )
-                            }
-                            {
-                                addingIndex.length !== 0 ?
-                                    <>
-                                        {
-                                            addingIndex.map((item, index) =>
-                                                <CarouselItem disabled={true}
-                                                              image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOIAAAB/CAMAAADFNu54AAAAA1BMVEWpqamhHEfZAAAAM0lEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBrA3CdAAE3EswrAAAAAElFTkSuQmCC'/>
-                                            )
-
-                                        }
-                                    </>
-                                    :
-                                    <></>
-                            }
-                        </div>
-                    )
-                }
-            </Carousel>
+                                                }
+                                            </>
+                                            :
+                                            <React.Fragment key={index}></React.Fragment>
+                                    }
+                                </div>
+                            )
+                        }
+                    </Carousel>
+            }
         </div>
     );
 };
 
-const CarouselItem = (props) => {
+const CarouselItem = ({disabled, id, image, value, deletePost}) => {
     const navigate = useNavigate();
-    const {isAdmin} = useContext(AdminContext);
+    const customTheme = createTheme({
+        components: {
+            MuiButton: {
+                styleOverrides: {
+                    outlined: {
+                        color: "red",
+                        borderColor: "red",
+                        backgroundColor: "white",
+                        '&:hover': {
+                            color: "red",
+                            borderColor: "red",
+                            backgroundColor: "lightgray"
+                        }
+                    }
+                }
+            }
+        }
+    });
 
     return (
-        <div className="carousel__item"
-             onClick={() => {
-                 if(!props.disabled){
-                    navigate(`/profcom/${(props.id)}`)
-                 }
-             }}
-        >
+        <div className="carousel__item">
             <img
-                src={props.image}
+                src={image}
                 className="carousel__content"
+                onClick={() => {
+                    if (!disabled) {
+                        navigate(`/profcom/${(id)}`)
+                    }
+                }}
             />
+            {
+                value === 1 &&
+                    <div className="delete__button" onClick={() => {
+                        deletePost(id);
+                    }}>
+                        <Button variant="outlined" theme={customTheme}>
+                            Удалить
+                        </Button>
+                    </div>
+            }
         </div>
     );
 };
-
-function randomIntFromInterval(min, max) { // min and max included
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 
 export default Profcom;
