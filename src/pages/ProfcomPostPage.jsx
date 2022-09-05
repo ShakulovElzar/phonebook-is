@@ -42,7 +42,7 @@ const ProfcomPostPage = () => {
                                 setToggleEditorClass(true);
                             }
                         }}
-                        style={{marginLeft: "75%", width: 250}}
+                        style={{width: 250}}
                     >Открыть редактор текста</Button>
                     <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}>
                         <Editor

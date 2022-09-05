@@ -44,7 +44,7 @@ const NpaPostPage = () => {
                                 setToggleEditorClass(true);
                             }
                         }}
-                        style={{marginLeft: "75%", width: 250}}
+                        style={{width: 250}}
                     >Открыть редактор текста</Button>
                     <div style={toggleEditorClass ? {display: "block"} : {display: "none"}}>
                         <Editor textId={textId} setToggleEditorClass={setToggleEditorClass} id={params.id} getData={getData} page="npa"/>
@@ -54,7 +54,7 @@ const NpaPostPage = () => {
             <br/>
             <hr/>
             <h1>{pageTitle}</h1>
-            <div dangerouslySetInnerHTML={{__html: pageText}}></div>
+            <div dangerouslySetInnerHTML={{__html: pageText}} className='npa-post__page'></div>
         </div>
     );
 };

@@ -15,6 +15,8 @@ import Button from "@mui/material/Button";
 import MyLoader from "../components/UI/MyLoader/MyLoader";
 import createTheme from "@mui/material/styles/createTheme";
 import Resizer from "react-image-file-resizer";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 function TabPanel(props) {
     const {children, value, index} = props;
@@ -240,20 +242,23 @@ const Profcom = () => {
                         swipe={true}
                         autoPlay={false}
                         navButtonsAlwaysVisible={true}
-                        className='carousel'
+
                     >
 
                         {
-                            NOPArr.map((item, index) => <div className='carousel__wrapper' key={index}>
+                            NOPArr.map((item, index) => <Grid container spacing={2} key={index} style={{marginLeft: -10}}>
                                     {
                                         postsData.slice((index * 6), (index * 6 + 6)).map((item, index) =>
-                                            <CarouselItem
-                                                key={index}
-                                                id={item.id}
-                                                image={item.image}
-                                                value={value}
+                                            <Grid item xs={6} style={{alignItems: "stretch"}}>
+                                                <CarouselItem
+                                                    key={index}
+                                                    id={item.id}
+                                                    image={item.image}
+                                                    value={value}
                                                     deletePost={deletePost}
-                                            />
+                                                />
+                                            </Grid>
+
                                         )
                                     }
                                     {
@@ -261,18 +266,20 @@ const Profcom = () => {
                                             <>
                                                 {
                                                     addingIndex.map((item, index) =>
-                                                        <CarouselItem
-                                                            key={index}
-                                                            disabled={true}
-                                                            image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOIAAAB/CAMAAADFNu54AAAAA1BMVEWpqamhHEfZAAAAM0lEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBrA3CdAAE3EswrAAAAAElFTkSuQmCC'/>
+                                                        <Grid item xs={6}>
+                                                            <CarouselItem
+                                                                key={index}
+                                                                disabled={true}
+                                                                image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOIAAAB/CAMAAADFNu54AAAAA1BMVEWpqamhHEfZAAAAM0lEQVR4nO3BAQ0AAADCoPdPbQ43oAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBrA3CdAAE3EswrAAAAAElFTkSuQmCC'
+                                                            />
+                                                        </Grid>
                                                     )
-
                                                 }
                                             </>
                                             :
                                             <React.Fragment key={index}></React.Fragment>
                                     }
-                                </div>
+                                </Grid>
                             )
                         }
                     </Carousel>
@@ -303,18 +310,24 @@ const CarouselItem = ({disabled, id, image, value, deletePost}) => {
     });
 
     return (
-        <div className="carousel__item">
-            <img
-                src={image}
-                className="carousel__content"
-                onClick={() => {
-                    if (!disabled) {
-                        navigate(`/profcom/${(id)}`)
-                    }
-                }}
-            />
-            {
-                value === 1 &&
+        <Paper sx={{
+            height: "30vh",
+            overflow: "hidden",
+            borderRadius: 5,
+            width: "100%"
+        }}>
+            <div className="carousel__item">
+                <img
+                    src={image}
+                    className="carousel__content"
+                    onClick={() => {
+                        if (!disabled) {
+                            navigate(`/profcom/${(id)}`)
+                        }
+                    }}
+                />
+                {
+                    value === 1 &&
                     <div className="delete__button" onClick={() => {
                         deletePost(id);
                     }}>
@@ -322,8 +335,9 @@ const CarouselItem = ({disabled, id, image, value, deletePost}) => {
                             Удалить
                         </Button>
                     </div>
-            }
-        </div>
+                }
+            </div>
+        </Paper>
     );
 };
 

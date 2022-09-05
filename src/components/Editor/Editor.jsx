@@ -35,6 +35,7 @@ function Editor({getData, page, id, setToggleEditorClass, textId}) {
     const [isError, setError] = useState(null);
     const addDetails = async (event) => {
         try {
+            event.preventDefault();
             event.persist();
             if (page === "npa") {
                 if(!hasText){
@@ -88,7 +89,7 @@ function Editor({getData, page, id, setToggleEditorClass, textId}) {
 
     return (
         <>
-            <div className="App">
+            <div className="editor-app">
                 <div>
                     <div className="row">
                         <form onSubmit={addDetails} className="update__forms">
