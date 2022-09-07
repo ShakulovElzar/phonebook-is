@@ -13,6 +13,7 @@ import NpaPostPage from '../pages/NpaPostPage';
 import MyLoader from "./UI/MyLoader/MyLoader";
 import {AuthContext} from '../context';
 import ProfcomPostPage from "../pages/ProfcomPostPage";
+import Quizzes from "../pages/Quizzes";
 
 const AppRouter = (props) => {
     let {isAuth, isLoading} = useContext(AuthContext);
@@ -35,6 +36,7 @@ const AppRouter = (props) => {
                         <Route exact path="/search" element={<Search />} key="4"/>
                         <Route exact path="/journal" element={<Journal />} key="5"/>
                         <Route exact path="/support" element={<Support/>} key="6"/>
+                        <Route exact path="/quizzes" element={<Quizzes/>} key="6"/>
                         <Route path="*" element={<Navigate to="/departments" />}/>
                     </Routes>
                     :

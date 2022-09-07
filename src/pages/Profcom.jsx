@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Carousel from 'react-material-ui-carousel'
 import {useNavigate} from "react-router-dom";
-import {AdminContext} from "../context";
+import {AdminContext, RoleContext} from "../context";
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
@@ -39,6 +39,7 @@ function TabPanel(props) {
 
 const Profcom = () => {
     const {isAdmin} = useContext(AdminContext);
+    const {hasRole} = useContext(RoleContext);
     const [postsData, setPostsData] = useState([]);
     const [postName, setPostName] = useState("");
     const [newPostName, setNewPostName] = useState("");
@@ -73,7 +74,7 @@ const Profcom = () => {
                     500,
                     500,
                     "JPEG",
-                    50,
+                    75,
                     0,
                     (uri) => {
                         setPhoto(uri);
@@ -94,8 +95,8 @@ const Profcom = () => {
         NOPArr.push(i)
     }
     let addingIndex = [];
-    if (postsData.length < 6) {
-        for (let i = 0; i < 6 - postsData.length; i++) {
+    if (postsData.length % 6 !== 0) {
+        for (let i = 0; i < 6 - (postsData.length % 6); i++) {
             addingIndex.push(i);
         }
     }
@@ -139,7 +140,7 @@ const Profcom = () => {
         <div className="page-body">
 
             {
-                isAdmin &&
+                (isAdmin || hasRole === "PROFCOM") &&
                 <>
                     <Box sx={{width: '100%'}}>
                         <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
@@ -242,14 +243,12 @@ const Profcom = () => {
                         swipe={true}
                         autoPlay={false}
                         navButtonsAlwaysVisible={true}
-
                     >
-
                         {
-                            NOPArr.map((item, index) => <Grid container spacing={2} key={index} style={{marginLeft: -10}}>
+                            NOPArr.map((item, index) => <Grid container spacing={2} key={index} style={{paddingRight: 12.5, margin: '0 auto'}} sx={{width: 1050 * 0.90}}>
                                     {
                                         postsData.slice((index * 6), (index * 6 + 6)).map((item, index) =>
-                                            <Grid item xs={6} style={{alignItems: "stretch"}}>
+                                            <Grid item xs={6}>
                                                 <CarouselItem
                                                     key={index}
                                                     id={item.id}
@@ -262,7 +261,7 @@ const Profcom = () => {
                                         )
                                     }
                                     {
-                                        addingIndex.length !== 0 ?
+                                        (addingIndex.length !== 0 && index === NOPArr.length - 1) ?
                                             <>
                                                 {
                                                     addingIndex.map((item, index) =>
@@ -311,12 +310,13 @@ const CarouselItem = ({disabled, id, image, value, deletePost}) => {
 
     return (
         <Paper sx={{
-            height: "30vh",
+            height: "32.5vh",
             overflow: "hidden",
             borderRadius: 5,
-            width: "100%"
+            display: 'flex',
+            alignContent: 'center',
+            position: 'relative'
         }}>
-            <div className="carousel__item">
                 <img
                     src={image}
                     className="carousel__content"
@@ -336,7 +336,6 @@ const CarouselItem = ({disabled, id, image, value, deletePost}) => {
                         </Button>
                     </div>
                 }
-            </div>
         </Paper>
     );
 };

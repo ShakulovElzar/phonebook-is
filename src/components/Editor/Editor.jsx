@@ -48,7 +48,7 @@ function Editor({getData, page, id, setToggleEditorClass, textId}) {
                         }
                     }).then(res => {
                         if (res.data.success === 200) {
-                            setTimeout(() => getData(), 500)
+                            setTimeout(() => getData(), 1000)
                         }
                     });
                 }
@@ -60,7 +60,11 @@ function Editor({getData, page, id, setToggleEditorClass, textId}) {
                         headers: {
                             Authorization: `Bearer ${localStorage.getItem("atoken")}`
                         }
-                    })
+                    }).then(res => {
+                        if (res.data.success === true) {
+                            setTimeout(() => getData(), 1000)
+                        }
+                    });
                 }
              }
             if (page === "profcom") {
@@ -77,7 +81,7 @@ function Editor({getData, page, id, setToggleEditorClass, textId}) {
                     }
                 }).then(res => {
                     if (res.data.success === true) {
-                        setTimeout(() => getData(), 500)
+                        setTimeout(() => getData(), 1000)
                     }
                 });
             }
@@ -85,6 +89,7 @@ function Editor({getData, page, id, setToggleEditorClass, textId}) {
         } catch (error) {
             throw error;
         }
+        getData();
     };
 
     return (

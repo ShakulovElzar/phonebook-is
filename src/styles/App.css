@@ -17,6 +17,7 @@ body {
 .App{
   max-width: 1248px;
   margin: 0 auto;
+  position: relative;
 }
 
 
@@ -48,6 +49,13 @@ header{
   justify-content: center;
   padding: 20px 0;
   font-size: 14px;
+}
+
+.navbar-mobile{
+  display: grid;
+
+  padding: 0 20px;
+  grid-gap: 30px;
 }
 
 
@@ -248,16 +256,11 @@ fieldset{
   align-content: center;
 }
 
-.carousel__text{
-  text-align: center;
-  margin-top: 150px;
-}
-
 .delete__button{
   position: absolute;
-  right: 0;
+  right: 4px;
   color: lightgray;
-  top: 0;
+  top: 4px;
 }
 
 /* support */
@@ -321,15 +324,6 @@ fieldset{
   .navbar__link{
     padding: 5px 15px;
   }
-  .carousel__wrapper{
-    width: 600px;
-    height: 500px;
-    margin: 0 auto;
-  }
-  .carousel__item{
-    width: 290px;
-    height: 150px;
-  }
   .search__input{
     width: 65%;
   }
@@ -355,15 +349,6 @@ fieldset{
   }
   .navbar__link{
     padding: 5px 10px;
-  }
-  .carousel__wrapper{
-    width: 400px;
-    height: 350px;
-    grid-gap: 10px;
-  }
-  .carousel__item{
-    width: 195px;
-    height: 110px;
   }
   .controls{
     display: flex;

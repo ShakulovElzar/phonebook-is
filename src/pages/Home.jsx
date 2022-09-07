@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import MyTable from '../components/UI/MyTablet/MyTable';
 import c from './pages.module.css';
 import axios from 'axios';
-import {AdminContext} from "../context";
+import {AdminContext, RoleContext} from "../context";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
@@ -32,6 +32,7 @@ function TabPanel(props) {
     );
 }
 const Home = () => {
+    const {hasRole} = useContext(RoleContext);
     const {isAdmin} = useContext(AdminContext);
     const [parentDepartment, setParentDepartment] = useState();
     const [targetDepartment, setTargetDepartment] = useState();
@@ -39,7 +40,7 @@ const Home = () => {
     const [deletedDepartment, setDeletedDepartment] = useState();
     const [departmentTitle, setDepartmentTitle] = useState("");
     const [wasSent, setWasSent] = useState(false);
-    
+
     // table data fetching
     const [tableData, setTableData] = useState([]);
     const [allDepartments, setAllDepartments] = useState([]);
@@ -126,7 +127,7 @@ const Home = () => {
     return (
         <div className="page-body">
             {
-                isAdmin &&
+                (isAdmin || hasRole === "CADR") &&
                     <>
                         <Box sx={{ width: '100%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
