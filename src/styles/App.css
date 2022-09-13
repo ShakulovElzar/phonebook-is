@@ -20,14 +20,6 @@ body {
   position: relative;
 }
 
-
-/* header */
-header{
-  text-align: center;
-  width: 100%;
-  background-color: #fff;
-}
-
 /* home page styles */
 
 .page-body{
@@ -51,13 +43,24 @@ header{
   font-size: 14px;
 }
 
-.navbar-mobile{
+.navbar__mobile{
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 25;
+  width: 30vw;
+  background-color: #464646;
   display: grid;
-
-  padding: 0 20px;
-  grid-gap: 30px;
+  justify-content: start;
+  padding: 50px 20px;
+  grid-gap: 10px;
+  transition: all 0.2s linear;
 }
 
+.navbar__mobile  button {
+  font-size: 11px;
+  
+}
 
 /* login */
 
@@ -261,6 +264,7 @@ fieldset{
   right: 4px;
   color: lightgray;
   top: 4px;
+  z-index: 2;
 }
 
 /* support */
@@ -369,6 +373,7 @@ fieldset{
   height: 25px;
   transform: rotate(90deg);
 }
+
 .admin-form__wrapper {
   padding-bottom: 20px;
   border-bottom: 1px solid;
@@ -378,4 +383,36 @@ fieldset{
 .user__photo{
   width: 70px;
   height: 100px;
+}
+
+.poll__wrapper{
+  width: 325px;
+  border-radius: 15px;
+  min-height: 150px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 36px 0;
+  padding: 20px;
+}
+
+.polls__wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  grid-gap: 50px;
+}
+
+.poll-options__wrapper{
+  display: flex;
+  flex-direction: column;
+  grid-gap: 10px;
+}
+
+.poll-option{
+  line-height: 50px;
+  width: 100%;
+  background-color: #e5e5e5;
+  padding: 0 15px;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: space-between;
 }

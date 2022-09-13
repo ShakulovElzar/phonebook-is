@@ -34,12 +34,15 @@ const Support = () => {
   const [reportText, setReportText] = useState("");
   const [reportDestination, setReportDestination] = useState(1);
   const [author, setAuthor] = useState();
+  const headers = ["Тип", "Описание", "Для кого", "Автор"];
+  if(isAdmin || hasRole === "MANAGER_IT" || hasRole === "IT_SPECIALIST"){
+    headers.push("Действия")
+  }
 
-  const [value, setValue] = React.useState();
+  const [value, setValue] = useState();
   const [options, setOptions] = useState([]);
   const [workers, setWorkers] = useState([]);
   const [journalData, setJournalData] = useState([]);
-  const [deletePost, setDeletePost] = useState(0);
   const [addOptionText, setAddOptionText] = useState("");
   const [deleteOptionItem, setDeleteOptionItem] = useState(0);
   const [updateOptionItem, setUpdateOptionItem] = useState(0);
@@ -58,15 +61,15 @@ const Support = () => {
         t.data.sort((a, b) => b["status"] - a["status"]).reverse();
         setJournalData(t.data);
       });
-	  axios
-		  .get(
-			  `http://10.200.24.103:8089/account/?search=${localStorage.getItem(
-				  "user"
-			  )}`
-		  )
-		  .then(res => {
-			  setAuthor(res.data[0].id);
-		  });
+    axios
+      .get(
+        `http://10.200.24.103:8089/account/?search=${localStorage.getItem(
+          "user"
+        )}`
+      )
+      .then(res => {
+        setAuthor(res.data[0].id);
+      });
   };
   const getOptionsData = () => {
     axios
@@ -115,18 +118,6 @@ const Support = () => {
   }, []);
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-  const deleteReport = event => {
-    event.preventDefault();
-    axios.delete(`http://10.200.24.103:8089/help/delete/${deletePost}/`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("atoken")}`
-      }
-    });
-    setTimeout(() => {
-      getJournalData();
-    }, 500);
-    handleChange("click", 0);
   };
   const addOption = event => {
     event.preventDefault();
@@ -234,197 +225,185 @@ const Support = () => {
               <Tabs value={value} onChange={handleChange}>
                 <Tab label="Список заявок" />
                 {isAdmin && (
-                  <React.Fragment>
                     <Tab label="Управление темами отправки" />
+                )}
+                {isAdmin && (
                     <Tab label="Управление работниками" />
-                  </React.Fragment>
                 )}
               </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
               <div className="admin-form__wrapper">
                 <MTable
-                  headers={["Тип", "Описание", "Для кого", "Автор", "Действия"]}
+                  headers={headers}
                   bodies={journalData}
                   showButtons={hasRole}
+                  isAdmin={isAdmin}
                   getJournalData={getJournalData}
                 />
               </div>
             </TabPanel>
-
             {isAdmin && (
-              <React.Fragment>
-                <TabPanel value={value} index={1}>
-                  <div className="admin-form__wrapper">
-                    <h3>Добавить опцию</h3>
-                    <form onSubmit={addOption} style={{ margin: "20px 0px" }}>
-                      <TextField
-                        sx={{ width: 400 }}
-                        variant="outlined"
-                        label="Добавить опцию"
-                        onChange={t => setAddOptionText(t.target.value)}
-                      />
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        style={{ marginLeft: 15, marginTop: 5 }}
-                      >
-                        Добавить
-                      </Button>
-                    </form>
-                    <h3>Удалить опцию</h3>
-                    <form
-                      onSubmit={deleteOption}
-                      style={{ margin: "20px 0px" }}
-                    >
-                      <FormControl>
-                        <InputLabel>Удалить опцию</InputLabel>
-                        <Select
-                          sx={{ width: 350 }}
-                          onChange={t => setDeleteOptionItem(t.target.value)}
-                          label="Выбрать опцию"
+                <React.Fragment>
+                  <TabPanel value={value} index={2}>
+                    <div className="admin-form__wrapper">
+                      <h3>Добавить работника</h3>
+                      <form onSubmit={addWorker} style={{ margin: "20px 0px" }}>
+                        <TextField
+                            sx={{ width: 400 }}
+                            variant="outlined"
+                            label="Добавить работника"
+                            onChange={t => setAddWorkerText(t.target.value)}
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            style={{ marginLeft: 15, marginTop: 5 }}
                         >
-                          {options.map((item, index) => (
-                            <MenuItem key={index} value={item.id}>
-                              {item.choice}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        style={{ marginLeft: 15, marginTop: 5 }}
-                      >
-                        Удалить
-                      </Button>
-                    </form>
-                    <h3>Обновить опцию</h3>
-                    <form
-                      style={{ margin: "20px 0px" }}
-                      onSubmit={updateOption}
-                    >
-                      <TextField
-                        sx={{ width: 400 }}
-                        style={{ marginRight: 20 }}
-                        variant="outlined"
-                        label="Новое название опции"
-                        onChange={t => setAddOptionText(t.target.value)}
-                      />
-                      <FormControl>
-                        <InputLabel>Выбрать опцию </InputLabel>
-                        <Select
-                          sx={{ width: 350 }}
-                          onChange={t => setUpdateOptionItem(t.target.value)}
-                          label="Выбрать опцию"
+                          Добавить
+                        </Button>
+                      </form>
+                      <h3>Удалить работника</h3>
+                      <form onSubmit={deleteWorker} style={{ margin: "20px 0px" }}>
+                        <FormControl>
+                          <InputLabel>Удалить работника</InputLabel>
+                          <Select
+                              sx={{ width: 350 }}
+                              onChange={t => setDeleteWorkerItem(t.target.value)}
+                              label="Выбрать работника"
+                          >
+                            {workers.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>
+                                  {item.workername}
+                                </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            style={{ marginLeft: 15, marginTop: 5 }}
                         >
-                          {options.map((item, index) => (
-                            <MenuItem key={index} value={item.id}>
-                              {item.choice}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
+                          Удалить
+                        </Button>
+                      </form>
+                      <h3>Обновить работника</h3>
+                      <form style={{ margin: "20px 0px" }} onSubmit={updateWorker}>
+                        <TextField
+                            sx={{ width: 400 }}
+                            style={{ marginRight: 20 }}
+                            variant="outlined"
+                            label="Новое имя работника"
+                            onChange={t => setAddWorkerText(t.target.value)}
+                        />
+                        <FormControl>
+                          <InputLabel>Выбрать работника </InputLabel>
+                          <Select
+                              sx={{ width: 350 }}
+                              onChange={t => setUpdateWorkerItem(t.target.value)}
+                              label="Выбрать работника"
+                          >
+                            {workers.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>
+                                  {item.workername}
+                                </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
 
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        style={{ marginLeft: 15, marginTop: 5 }}
-                      >
-                        Добавить
-                      </Button>
-                    </form>
-                  </div>
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                  <div className="admin-form__wrapper">
-                    <h3>Добавить работника</h3>
-                    <form onSubmit={addWorker} style={{ margin: "20px 0px" }}>
-                      <TextField
-                        sx={{ width: 400 }}
-                        variant="outlined"
-                        label="Добавить работника"
-                        onChange={t => setAddWorkerText(t.target.value)}
-                      />
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        style={{ marginLeft: 15, marginTop: 5 }}
-                      >
-                        Добавить
-                      </Button>
-                    </form>
-                    <h3>Удалить работника</h3>
-                    <form
-                      onSubmit={deleteWorker}
-                      style={{ margin: "20px 0px" }}
-                    >
-                      <FormControl>
-                        <InputLabel>Удалить работника</InputLabel>
-                        <Select
-                          sx={{ width: 350 }}
-                          onChange={t => setDeleteWorkerItem(t.target.value)}
-                          label="Выбрать работника"
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            style={{ marginLeft: 15, marginTop: 5 }}
                         >
-                          {workers.map((item, index) => (
-                            <MenuItem key={index} value={item.id}>
-                              {item.workername}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        style={{ marginLeft: 15, marginTop: 5 }}
-                      >
-                        Удалить
-                      </Button>
-                    </form>
-                    <h3>Обновить работника</h3>
-                    <form
-                      style={{ margin: "20px 0px" }}
-                      onSubmit={updateWorker}
-                    >
-                      <TextField
-                        sx={{ width: 400 }}
-                        style={{ marginRight: 20 }}
-                        variant="outlined"
-                        label="Новое имя работника"
-                        onChange={t => setAddWorkerText(t.target.value)}
-                      />
-                      <FormControl>
-                        <InputLabel>Выбрать работника </InputLabel>
-                        <Select
-                          sx={{ width: 350 }}
-                          onChange={t => setUpdateWorkerItem(t.target.value)}
-                          label="Выбрать работника"
+                          Изменить
+                        </Button>
+                      </form>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <div className="admin-form__wrapper">
+                      <h3>Добавить опцию</h3>
+                      <form onSubmit={addOption} style={{ margin: "20px 0px" }}>
+                        <TextField
+                            sx={{ width: 400 }}
+                            variant="outlined"
+                            label="Добавить опцию"
+                            onChange={t => setAddOptionText(t.target.value)}
+                        />
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            style={{ marginLeft: 15, marginTop: 5 }}
                         >
-                          {workers.map((item, index) => (
-                            <MenuItem key={index} value={item.id}>
-                              {item.workername}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
+                          Добавить
+                        </Button>
+                      </form>
+                      <h3>Удалить опцию</h3>
+                      <form onSubmit={deleteOption} style={{ margin: "20px 0px" }}>
+                        <FormControl>
+                          <InputLabel>Удалить опцию</InputLabel>
+                          <Select
+                              sx={{ width: 350 }}
+                              onChange={t => setDeleteOptionItem(t.target.value)}
+                              label="Выбрать опцию"
+                          >
+                            {options.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>
+                                  {item.choice}
+                                </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            style={{ marginLeft: 15, marginTop: 5 }}
+                        >
+                          Удалить
+                        </Button>
+                      </form>
+                      <h3>Обновить опцию</h3>
+                      <form style={{ margin: "20px 0px" }} onSubmit={updateOption}>
+                        <TextField
+                            sx={{ width: 400 }}
+                            style={{ marginRight: 20 }}
+                            variant="outlined"
+                            label="Новое название опции"
+                            onChange={t => setAddOptionText(t.target.value)}
+                        />
+                        <FormControl>
+                          <InputLabel>Выбрать опцию </InputLabel>
+                          <Select
+                              sx={{ width: 350 }}
+                              onChange={t => setUpdateOptionItem(t.target.value)}
+                              label="Выбрать опцию"
+                          >
+                            {options.map((item, index) => (
+                                <MenuItem key={index} value={item.id}>
+                                  {item.choice}
+                                </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
 
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        size="large"
-                        style={{ marginLeft: 15, marginTop: 5 }}
-                      >
-                        Изменить
-                      </Button>
-                    </form>
-                  </div>
-                </TabPanel>
-              </React.Fragment>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            size="large"
+                            style={{ marginLeft: 15, marginTop: 5 }}
+                        >
+                          Добавить
+                        </Button>
+                      </form>
+                    </div>
+                  </TabPanel>
+                </React.Fragment>
             )}
           </Box>
         </div>

@@ -6,6 +6,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
+import ImportComponent from '../../components/UI/ImportComponent/ImportComponent';
 
 const Register = () => {
 	const [ changeContent, setChangeContent ] = useState(false);
@@ -21,14 +22,6 @@ const Register = () => {
 	const [ jobtitles, setJobTitles ] = useState([]);
 	const [ jobtitle, setJobTitle ] = useState(1);
 	const [ photo, setPhoto ] = useState(null);
-
-	function encodeImageFileAsURL(file) {
-		var reader = new FileReader();
-		reader.onloadend = function() {
-			setPhoto(reader.result);
-		};
-		reader.readAsDataURL(file);
-	}
 
 	useEffect(
 		() => {
@@ -125,23 +118,7 @@ const Register = () => {
 								<p className="invalid">
 									Фото
 								</p>
-								<input
-									required
-									id="raised-button-file"
-									onChange={t => {
-										if (t !== undefined) {
-											encodeImageFileAsURL(t.target.files[0]);
-										}
-									}}
-									type="file"
-									style={{ display: 'none' }}
-									accept=".jpg, .jpeg, .png"
-								/>
-								<label htmlFor="raised-button-file">
-									<Button variant="contained" component="span">
-										Опубликовать
-									</Button>
-								</label>
+								<ImportComponent setPhoto={setPhoto} photo={photo} />
 							</div>
 							<div className="register-input">
 								<p className="invalid">

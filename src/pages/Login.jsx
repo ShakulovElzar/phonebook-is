@@ -2,13 +2,12 @@ import axios from 'axios';
 import React, {useContext, useState} from 'react';
 import {Link} from 'react-router-dom';
 import c from './pages.module.css';
-import {AdminContext, AuthContext} from '../context';
+import {AuthContext} from '../context';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import jwtDecode from 'jwt-decode';
 
 const Login = props => {
-	const { setIsAdmin } = useContext(AdminContext);
 	let { setIsAuth } = useContext(AuthContext);
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
@@ -42,7 +41,7 @@ const Login = props => {
 		localStorage.setItem('user', response.data.email);
 		localStorage.setItem('page', '1');
 		props.setPage(1);
-		props.isAdminCheck();
+		props.roleCheck();
 		setIsAuth(true);
 		if (rememberMe) {
 			const decodedToken = jwtDecode(response.data.access);
@@ -56,13 +55,6 @@ const Login = props => {
 			setEmailError('Некорректная эл.почта');
 		} else {
 			setEmailError('');
-		}
-	};
-	const blurHandler = e => {
-		switch (e.target.name) {
-			case 'email':
-				setEmailDirty(true);
-				break;
 		}
 	};
 

@@ -74,9 +74,8 @@ const Journal = () => {
 			.then(t => setJobtitles(t.data));
 	};
 	const getJobtitle = id => {
-		let userID = id;
 		for (let i = 0; i < users.length; i++) {
-			if (users[i].id === userID) {
+			if (users[i].id === id) {
 				for (let j = 0; j < jobtitles.length; j++) {
 					if (jobtitles[j].jobtitle === users[i].jobtitle) {
 						setJobtitle(jobtitles[j].id);
@@ -86,17 +85,15 @@ const Journal = () => {
 		}
 	};
 	const getIdWithFullname = name => {
-		let userText = name;
 		for (let i = 0; i < users.length; i++) {
-			if (users[i].fullname === userText) {
+			if (users[i].fullname === name) {
 				setUpdateFullnameId(users[i].id);
 			}
 		}
 	};
 	const getIdWithWhomAsked = name => {
-		let userText = name;
 		for (let i = 0; i < users.length; i++) {
-			if (users[i].fullname === userText) {
+			if (users[i].fullname === name) {
 				setNewWhomAskedId(users[i].id);
 			}
 		}
@@ -203,7 +200,7 @@ const Journal = () => {
 											fullWidth
 											required
 											label="Причина"
-											variant="outlined"
+											variant="standard"
 											value={reasonText}
 											onChange={i => setReasonText(i.target.value)}
 										/>
@@ -219,6 +216,7 @@ const Journal = () => {
 															getJobtitle(t.target.value);
 														}}
 														label="Выбрать человека"
+														variant="standard"
 													>
 														{users.map((item, index) => (
 															<MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>
@@ -234,6 +232,7 @@ const Journal = () => {
 													<InputLabel>Выбрать человека</InputLabel>
 													<Select
 														sx={{ width: 350 }}
+														variant="standard"
 														onChange={t => setWhomAskedId(t.target.value)}
 														label="Выбрать человека"
 													>
@@ -271,7 +270,12 @@ const Journal = () => {
 										<h3>Выберите пост</h3>
 										<FormControl>
 											<InputLabel>Выбрать пост</InputLabel>
-											<Select sx={{ width: 350 }} onChange={t => setDeleteRef(t.target.value)} label="Выбрать пост">
+											<Select
+												sx={{ width: 350 }}
+												onChange={t => setDeleteRef(t.target.value)}
+												label="Выбрать пост"
+												variant="standard"
+											>
 												{stuff.map((item, index) => (
 													<MenuItem key={index} value={item.id}>{item.fullname}: {item.reason}</MenuItem>
 												))}
@@ -291,6 +295,7 @@ const Journal = () => {
 											<FormControl>
 												<InputLabel>Выбрать пост</InputLabel>
 												<Select
+													variant="standard"
 													sx={{ width: 350 }}
 													onChange={t => handlePostIdChange(t.target.value)}
 													label="Выбрать пост"
@@ -303,9 +308,9 @@ const Journal = () => {
 										</div>
 										<h2>Изменить пост</h2>
 										<TextField
-											sx={{ width: 350 }}
+											sx={{ width: 450 }}
 											label="Новая причина"
-											variant="outlined"
+											variant="standard"
 											value={newReasonText}
 											onChange={i => setNewReasonText(i.target.value)}
 										/>
@@ -317,6 +322,7 @@ const Journal = () => {
 													<Select
 														sx={{ width: 350 }}
 														value={updateFullnameId}
+														variant="standard"
 														onChange={t => {
 															setUpdateFullnameId(t.target.value);
 															getJobtitle(t.target.value);
@@ -338,6 +344,7 @@ const Journal = () => {
 													<Select
 														value={newWhomAskedId}
 														sx={{ width: 350 }}
+														variant="standard"
 														onChange={t => setNewWhomAskedId(t.target.value)}
 														label="Выбрать человека"
 													>
@@ -375,7 +382,7 @@ const Journal = () => {
 								fullWidth
 								required
 								label="Причина"
-								variant="outlined"
+								variant="standard"
 								value={reasonText}
 								onChange={i => setReasonText(i.target.value)}
 							/>
@@ -386,6 +393,7 @@ const Journal = () => {
 										<InputLabel>Выбрать человека</InputLabel>
 										<Select
 											sx={{ width: 350 }}
+											variant="standard"
 											onChange={t => {
 												setFullnameId(t.target.value);
 												getJobtitle(t.target.value);
@@ -402,7 +410,12 @@ const Journal = () => {
 									<h3>Выберите человека, у которого он отпросился</h3>
 									<FormControl>
 										<InputLabel>Выбрать человека</InputLabel>
-										<Select sx={{ width: 350 }} onChange={t => setWhomAskedId(t.target.value)} label="Выбрать человека">
+										<Select
+											sx={{ width: 350 }}
+											onChange={t => setWhomAskedId(t.target.value)}
+											label="Выбрать человека"
+											variant="standard"
+										>
 											{users.map((item, index) => <MenuItem key={index} value={item.id}>{item.fullname}</MenuItem>)}
 										</Select>
 									</FormControl>

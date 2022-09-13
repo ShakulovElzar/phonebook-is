@@ -36,13 +36,15 @@ const ProfcomPostPage = () => {
 		<div className="page-body">
 			{(isAdmin || hasRole === 'PROFCOM') &&
 				<div style={{ color: 'black' }}>
-					<Button
-						variant={toggleEditorClass ? 'outlined' : 'contained'}
-						onClick={() => setToggleEditorClass(!toggleEditorClass)}
-						style={{ width: 250 }}
-					>
-						Открыть редактор текста
-					</Button>
+					<div style={{ display: "flex", justifyContent: "flex-end" }}>
+						<Button
+							variant={toggleEditorClass ? 'outlined' : 'contained'}
+							onClick={() => setToggleEditorClass(!toggleEditorClass)}
+							style={{ width: 250 }}
+						>
+							Открыть редактор текста
+						</Button>
+					</div>
 					<div style={toggleEditorClass ? { display: 'block' } : { display: 'none' }}>
 						<Editor
 							textId={params.id}

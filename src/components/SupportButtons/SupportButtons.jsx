@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useContext} from "react";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import {AdminContext} from "../../context";
 
 const SupportButtons = ({ manager, status, id, getJournalData }) => {
+    const {isAdmin} = useContext(AdminContext);
   const makeReportDone = event => {
     event.preventDefault();
     axios.patch(
@@ -57,7 +59,7 @@ const SupportButtons = ({ manager, status, id, getJournalData }) => {
 
   return (
     <React.Fragment>
-      {manager ? (
+      {(manager || isAdmin) ? (
         <React.Fragment>
           {status === "0" && (
             <img

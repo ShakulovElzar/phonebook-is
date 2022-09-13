@@ -11,21 +11,19 @@ import InputLabel from '@mui/material/InputLabel/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import MyLoader from '../components/UI/MyLoader/MyLoader';
 
 function TabPanel(props) {
 	const { children, value, index } = props;
 
 	return (
 		<div
-			role="tabpanel"
+			role='tabpanel'
 			hidden={value !== index}
 			id={`simple-tabpanel-${index}`}
 			aria-labelledby={`simple-tab-${index}`}
 		>
-			{value === index &&
-				<Box sx={{ paddingTop: 1 }}>
-					{children}
-				</Box>}
+			{value === index && <Box sx={{ paddingTop: 1 }}>{children}</Box>}
 		</div>
 	);
 }
@@ -33,25 +31,28 @@ function TabPanel(props) {
 const Npa = () => {
 	const { isAdmin } = useContext(AdminContext);
 	const { hasRole } = useContext(RoleContext);
-	const [ npaTitle, setNpaTitle ] = useState('');
-	const [ wasSent, setWasSent ] = useState(false);
-	const [ targetedNpa, setTargetedNpa ] = useState();
-	const [ deletedNpa, setDeletedNpa ] = useState();
+	const [npaTitle, setNpaTitle] = useState('');
+	const [wasSent, setWasSent] = useState(false);
+	const [targetedNpa, setTargetedNpa] = useState();
+	const [deletedNpa, setDeletedNpa] = useState();
+	const [isLoading, setIsLoading] = useState(false);
 
-	const [ tableData, setTableData ] = useState([]);
+	const [tableData, setTableData] = useState([]);
 	const getData = async () => {
-		const response = await axios.get('http://10.200.24.103:8089/npa/');
-		setTableData(response.data);
+		setIsLoading(true);
+		await axios
+			.get('http://10.200.24.103:8089/npa/')
+			.then((response) => {
+				setTableData(response.data);
+			})
+			.then(() => setIsLoading(false));
 	};
 
-	useEffect(
-		() => {
-			getData();
-		},
-		[]
-	);
+	useEffect(() => {
+		getData();
+	}, []);
 
-	const addNpa = event => {
+	const addNpa = (event) => {
 		event.preventDefault();
 		axios.post(
 			'http://10.200.24.103:8089/npa/create/',
@@ -65,15 +66,12 @@ const Npa = () => {
 			}
 		);
 		setWasSent(true);
-		setTimeout(
-			() => {
-				setWasSent(false);
-			},
-			3000
-		);
+		setTimeout(() => {
+			setWasSent(false);
+		}, 3000);
 		setTimeout(() => getData(), 1000);
 	};
-	const deleteNpa = event => {
+	const deleteNpa = (event) => {
 		event.preventDefault();
 		axios.delete(`http://10.200.24.103:8089/npa/delete/${deletedNpa}/`, {
 			headers: {
@@ -82,7 +80,7 @@ const Npa = () => {
 		});
 		setTimeout(() => getData(), 1000);
 	};
-	const updateNpa = event => {
+	const updateNpa = (event) => {
 		event.preventDefault();
 		axios.patch(
 			`http://10.200.24.103:8089/npa/update/${targetedNpa}/`,
@@ -98,7 +96,7 @@ const Npa = () => {
 		);
 		setTimeout(() => getData(), 1000);
 	};
-	const checkId = id => {
+	const checkId = (id) => {
 		if (id === 1) {
 			return 'selected';
 		} else {
@@ -106,90 +104,150 @@ const Npa = () => {
 		}
 	};
 
-	const [ value, setValue ] = React.useState();
+	const [value, setValue] = React.useState();
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 	return (
-		<div className="page-body">
-			{(isAdmin || hasRole === 'NPA') &&
+		<div className='page-body'>
+			{(isAdmin || hasRole === 'NPA') && (
 				<React.Fragment>
 					<Box sx={{ width: '100%' }}>
 						<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-							<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-								<Tab label="Добавить" />
-								<Tab label="Удалить" />
-								<Tab label="Обновить" />
+							<Tabs
+								value={value}
+								onChange={handleChange}
+								aria-label='basic tabs example'
+							>
+								<Tab label='Добавить' />
+								<Tab label='Удалить' />
+								<Tab label='Обновить' />
 							</Tabs>
 						</Box>
 						<TabPanel value={value} index={0}>
-							<div className="admin-form__wrapper">
+							<div className='admin-form__wrapper'>
 								<h2>Заполнение нового НПА</h2>
 								<form onSubmit={addNpa}>
 									<TextField
 										fullWidth
-										label="Название НПА"
-										variant="outlined"
+										label='Название НПА'
+										variant='standard'
 										value={npaTitle}
-										onChange={i => setNpaTitle(i.target.value)}
+										onChange={(i) =>
+											setNpaTitle(i.target.value)
+										}
 									/>
-									<Button type="submit" variant="contained" size="large" style={{ marginTop: 5 }}>Добавить</Button>
+									<Button
+										type='submit'
+										variant='contained'
+										size='large'
+										style={{ marginTop: 15 }}
+									>
+										Добавить
+									</Button>
 								</form>
 								<br />
 								{wasSent && <h1>Форма была отправлена!</h1>}
 							</div>
 						</TabPanel>
 						<TabPanel value={value} index={1}>
-							<div className="admin-form__wrapper">
+							<div className='admin-form__wrapper'>
 								<h2>Удалить НПА</h2>
 								<form onSubmit={deleteNpa}>
 									<FormControl>
 										<InputLabel>Удалить НПА</InputLabel>
 										<Select
 											sx={{ width: 350 }}
-											onChange={t => setDeletedNpa(t.target.value)}
-											label="Выбрать департамент"
+											onChange={(t) =>
+												setDeletedNpa(t.target.value)
+											}
+											label='Выбрать департамент'
+											variant='standard'
 										>
 											{tableData.map((item, index) => (
-												<MenuItem key={index} defaultValue={checkId(item.id)} value={item.id}>{item.title}</MenuItem>
+												<MenuItem
+													key={index}
+													defaultValue={checkId(
+														item.id
+													)}
+													value={item.id}
+												>
+													{item.title}
+												</MenuItem>
 											))}
 										</Select>
 									</FormControl>
 									<br />
-									<Button type="submit" variant="contained" size="large" style={{ marginTop: 5 }}>Удалить</Button>
+									<Button
+										type='submit'
+										variant='contained'
+										size='large'
+										style={{ marginTop: 15 }}
+									>
+										Удалить
+									</Button>
 								</form>
 							</div>
 						</TabPanel>
 						<TabPanel value={value} index={2}>
-							<div className="admin-form__wrapper">
+							<div className='admin-form__wrapper'>
 								<h2>Изменить НПА</h2>
 								<form onSubmit={updateNpa}>
 									<TextField
 										fullWidth
-										label="Новое название НПА"
-										variant="outlined"
+										label='Новое название НПА'
+										variant='standard'
 										value={npaTitle}
-										onChange={i => setNpaTitle(i.target.value)}
+										onChange={(i) =>
+											setNpaTitle(i.target.value)
+										}
 									/>
 									<h3>Выберите НПА</h3>
 									<FormControl>
 										<InputLabel>Выбрать НПА</InputLabel>
-										<Select sx={{ width: 350 }} onChange={t => setTargetedNpa(t.target.value)} label="Выбрать НПА">
+										<Select
+											sx={{ width: 350 }}
+											onChange={(t) =>
+												setTargetedNpa(t.target.value)
+											}
+											label='Выбрать НПА'
+											variant='standard'
+										>
 											{tableData.map((item, index) => (
-												<MenuItem key={index} defaultValue={checkId(item.id)} value={item.id}>{item.title}</MenuItem>
+												<MenuItem
+													key={index}
+													defaultValue={checkId(
+														item.id
+													)}
+													value={item.id}
+												>
+													{item.title}
+												</MenuItem>
 											))}
 										</Select>
 									</FormControl>
 									<br />
-									<Button type="submit" variant="contained" size="large" style={{ marginTop: 5 }}>Изменить</Button>
+									<Button
+										type='submit'
+										variant='contained'
+										size='large'
+										style={{ marginTop: 15 }}
+									>
+										Изменить
+									</Button>
 								</form>
 							</div>
 						</TabPanel>
 					</Box>
-				</React.Fragment>}
+				</React.Fragment>
+			)}
 			<h1>НПА</h1>
-			<MyTable page="npa" tableData={tableData} />
+			{isLoading ? (
+				<MyLoader />
+			) : (
+				<MyTable page='npa' tableData={tableData} />
+			)}
 		</div>
 	);
 };

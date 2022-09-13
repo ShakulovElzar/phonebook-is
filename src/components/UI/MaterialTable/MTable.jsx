@@ -58,7 +58,7 @@ const MTable = props => {
                       )}
                     </>
                   ))}
-                  {props.showButtons === "MANAGER_IT" && (
+                  {(props.showButtons === "MANAGER_IT" || props.isAdmin) && (
                     <TableCell key={index + 1} component="th" scope="row" align='center'>
                       <SupportButtons manager={true} status={el.status} id={el.id} getJournalData={props.getJournalData}/>
                     </TableCell>

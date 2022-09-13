@@ -1,12 +1,12 @@
 import React from 'react';
-import c from "./MyLoader.module.css"
+import c from './MyLoader.module.css';
 
 const MyLoader = () => {
-    return (
-        <div className={c.loader}>
-            
-        </div>
-    );
+	return (
+		<div style={{ display: 'flex', justifyContent: 'center' }}>
+			<div className={c.loader}></div>
+		</div>
+	);
 };
 
 export default MyLoader;
