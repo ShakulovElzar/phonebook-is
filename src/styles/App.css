@@ -20,6 +20,10 @@ body {
   position: relative;
 }
 
+header{
+  min-width: 100%;
+}
+
 /* home page styles */
 
 .page-body{
@@ -175,9 +179,10 @@ body {
 
 /* search */
 
-.search__inputs{
+.search__ordering_box{
   display: flex;
-  justify-content: space-between;
+  grid-gap: 15px;
+  align-items: center;
 }
 
 .search__input{
@@ -240,7 +245,7 @@ fieldset{
 .search-response__wrapper{
   display: flex;
   flex-direction: column;
-  grid-gap: 30px;
+  grid-gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -340,9 +345,6 @@ fieldset{
 }
 
 @media all and (max-width: 768px){
-  .App{
-    width: 480px;
-  }
   .page-body{
     font-size: 10px;
     padding: 40px 40px;
@@ -388,9 +390,9 @@ fieldset{
 .poll__wrapper{
   width: 325px;
   border-radius: 15px;
-  min-height: 150px;
   box-shadow: rgba(100, 100, 111, 0.2) 0 7px 36px 0;
   padding: 20px;
+  background-color: #23241f;
 }
 
 .polls__wrapper {

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AdminContext, AuthContext } from "../../context";
 import Button from "@mui/material/Button";
 
-const Navbar = ({ page, setPage }) => {
+const MobileNavbar = ({ page, setPage, isOpen }) => {
   const { isAuth, setIsAuth } = useContext(AuthContext);
   const { setIsAdmin } = useContext(AdminContext);
   const [logName, setLogName] = useState("Войти");
@@ -28,34 +28,43 @@ const Navbar = ({ page, setPage }) => {
   }, [isAuth]);
 
   return (
-    <React.Fragment>
-      <div className="navbar">
-        {links.map(item => (
-          <Link
-            to={item.to}
-            key={item.id}
-            onClick={() => {
-              if (!isAuth) return;
-              if (item.id === 7) {
-                setIsAuth(false);
-                setIsAdmin(false);
-                localStorage.clear();
-              }
-              setPage(item.id);
-              localStorage.setItem("page", JSON.stringify(item.id));
+    <div
+      className="navbar__mobile"
+      style={
+        isOpen
+          ? { transform: "translateX(0)" }
+          : { transform: "translateX(-100%)" }
+      }
+    >
+      {links.map(item => (
+        <Link
+          to={item.to}
+          key={item.id}
+          onClick={() => {
+            if (!isAuth) return;
+            if (item.id === 7) {
+              setIsAuth(false);
+              setIsAdmin(false);
+              localStorage.clear();
+            }
+            setPage(item.id);
+            localStorage.setItem("page", JSON.stringify(item.id));
+          }}
+        >
+          <Button
+            variant={page === item.id ? "contained" : "outlined"}
+            style={{
+              padding: "5px 15px",
+              color: "white",
+              borderColor: "white"
             }}
           >
-            <Button
-              variant={JSON.parse(page) === item.id ? "contained" : "outlined"}
-              style={{ padding: "5px 25px", margin: "0 10px" }}
-            >
-              {item.name}
-            </Button>
-          </Link>
-        ))}
-      </div>
-    </React.Fragment>
+            {item.name}
+          </Button>
+        </Link>
+      ))}
+    </div>
   );
 };
 
-export default Navbar;
+export default MobileNavbar;
